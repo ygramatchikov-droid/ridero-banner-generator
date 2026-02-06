@@ -1,0 +1,124 @@
+@import url('https://fonts.googleapis.com/css2?family=PT+Sans+Caption:wght@400;700&family=PT+Sans:wght@400;700&family=PT+Serif:wght@400;700&display=swap');
+@import "tailwindcss";
+
+:root {
+  /* Ridero Colors */
+  --ridero-orange: #FF7E00;
+  --ridero-light-orange: #FFD8B3;
+  --ridero-green: #80B027;
+  --ridero-dark-grey: #46545B;
+  --ridero-medium-grey: #8A9BA3;
+  --ridero-light-grey: #E8EBED;
+  --ridero-bg-grey: #F5F6F7;
+  --ridero-white: #FFFFFF;
+
+  /* Semantic colors */
+  --background: var(--ridero-white);
+  --foreground: var(--ridero-dark-grey);
+  --primary: var(--ridero-orange);
+  --primary-light: var(--ridero-light-orange);
+  --secondary: var(--ridero-green);
+  --muted: var(--ridero-medium-grey);
+  --border: var(--ridero-light-grey);
+  --card-bg: var(--ridero-white);
+  --page-bg: var(--ridero-bg-grey);
+
+  /* Shadows */
+  --shadow-card: 0px 4px 16px rgba(70, 84, 91, 0.15);
+  --shadow-button: 0px 2px 8px rgba(255, 126, 0, 0.3);
+
+  /* Spacing */
+  --space-xs: 8px;
+  --space-sm: 12px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 40px;
+  --space-3xl: 48px;
+  --space-4xl: 80px;
+
+  /* Border radius */
+  --radius-button: 2px;
+  --radius-card: 4px;
+  --radius-input: 2px;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-light: var(--primary-light);
+  --color-secondary: var(--secondary);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --font-sans: 'PT Sans', sans-serif;
+  --font-serif: 'PT Serif', serif;
+  --font-caption: 'PT Sans Caption', sans-serif;
+}
+
+body {
+  background: var(--page-bg);
+  color: var(--foreground);
+  font-family: 'PT Sans', sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* Typography classes */
+.text-h1 {
+  font-family: 'PT Serif', serif;
+  font-weight: 700;
+  font-size: 64px;
+  line-height: 1.2;
+}
+
+.text-h2 {
+  font-family: 'PT Serif', serif;
+  font-weight: 700;
+  font-size: 48px;
+  line-height: 1.25;
+}
+
+.text-h3 {
+  font-family: 'PT Serif', serif;
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 1.3;
+}
+
+.text-h4 {
+  font-family: 'PT Sans Caption', sans-serif;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 1.35;
+}
+
+.text-body {
+  font-family: 'PT Sans', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.text-body-sm {
+  font-family: 'PT Sans', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.text-caption {
+  font-family: 'PT Sans Caption', sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.text-label {
+  font-family: 'PT Sans Caption', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1.4;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
