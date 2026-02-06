@@ -20,6 +20,8 @@ export function Step5Preview() {
     setEditedAuthor,
     setEditedAnnotation,
     setPresentationData,
+    qrUrl,
+    setQrUrl,
     prevStep,
     nextStep,
   } = useBannerStore();
@@ -37,6 +39,7 @@ export function Step5Preview() {
       author: editedAuthor,
       annotation: editedAnnotation,
       genre: bookData.genre,
+      qrUrl,
     };
 
     switch (format) {
@@ -99,12 +102,19 @@ export function Step5Preview() {
               onChange={(e) => setEditedAnnotation(e.target.value)}
               maxLength={200}
               rows={4}
-              className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:border-blue-500 transition-colors resize-none"
+              className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#FF7E00] transition-colors resize-none"
             />
             <p className="text-sm text-gray-500 mt-1">
               {editedAnnotation.length}/200 знаков
             </p>
           </div>
+
+          <Input
+            label="Ссылка для QR-кода"
+            placeholder="https://ridero.ru/books/your-book/read/"
+            value={qrUrl}
+            onChange={(e) => setQrUrl(e.target.value)}
+          />
 
           {bannerType === 'presentation' && (
             <>
@@ -113,6 +123,14 @@ export function Step5Preview() {
                   Данные презентации
                 </h3>
                 <div className="space-y-4">
+                  <Input
+                    label="Название мероприятия"
+                    placeholder="Презентация моей книги на Non/fiction!"
+                    value={presentationData.exhibitionName}
+                    onChange={(e) =>
+                      setPresentationData({ exhibitionName: e.target.value })
+                    }
+                  />
                   <Input
                     label="Время"
                     placeholder="14:30–15:00"

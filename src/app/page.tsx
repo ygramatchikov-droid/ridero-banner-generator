@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import { useBannerStore } from '@/lib/store';
 import { StepIndicator } from '@/components/ui';
 import {
@@ -12,10 +13,50 @@ import {
 } from '@/components/steps';
 
 export default function Home() {
-  const { currentStep, reset } = useBannerStore();
+  const { currentStep, setCurrentStep, reset } = useBannerStore();
+
+  // Sync step to URL hash and handle browser back/forward
+  useEffect(() => {
+    // Set hash on step change
+    const hash = `#step-${currentStep}`;
+    if (window.location.hash !== hash) {
+      window.history.pushState(null, '', hash);
+    }
+  }, [currentStep]);
+
+  useEffect(() => {
+    // Read initial hash
+    const hash = window.location.hash;
+    const match = hash.match(/^#step-(\d+)$/);
+    if (match) {
+      const step = parseInt(match[1], 10);
+      if (step >= 1 && step <= 6) {
+        setCurrentStep(step);
+      }
+    }
+
+    // Listen for popstate (browser back/forward)
+    const handlePopState = () => {
+      const hash = window.location.hash;
+      const match = hash.match(/^#step-(\d+)$/);
+      if (match) {
+        const step = parseInt(match[1], 10);
+        if (step >= 1 && step <= 6) {
+          setCurrentStep(step);
+        }
+      } else {
+        setCurrentStep(1);
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [setCurrentStep]);
 
   const handleLogoClick = () => {
-    reset();
+    if (confirm('Сбросить все данные и начать заново?')) {
+      reset();
+    }
   };
 
   const renderStep = () => {
@@ -66,7 +107,7 @@ export default function Home() {
       {/* Footer */}
       <footer className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 py-3">
         <div className="max-w-7xl mx-auto px-4 text-center text-sm text-gray-500">
-          Ridero © 2026 • Генератор баннеров для авторов
+          Ridero &copy; {new Date().getFullYear()} &bull; Генератор баннеров для авторов
         </div>
       </footer>
     </main>

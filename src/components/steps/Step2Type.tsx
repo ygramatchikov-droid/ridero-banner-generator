@@ -68,6 +68,13 @@ export function Step2Type() {
           <h3 className="font-semibold text-gray-900 mb-4">Данные мероприятия</h3>
 
           <Input
+            label="Название мероприятия"
+            placeholder="Презентация моей книги на Non/fiction!"
+            value={presentationData.exhibitionName}
+            onChange={(e) => setPresentationData({ exhibitionName: e.target.value })}
+          />
+
+          <Input
             label="Время"
             placeholder="14:30–15:00"
             value={presentationData.time}

@@ -9,9 +9,10 @@ export interface BookData {
 }
 
 export interface PresentationData {
-  time: string;        // e.g. "14:30–15:00"
-  location: string;    // e.g. "Москва, Гостиный двор"
-  stand: string;       // e.g. "Стенд Е-19"
+  exhibitionName: string; // e.g. "Презентация моей книги на Non/fiction!"
+  time: string;           // e.g. "14:30–15:00"
+  location: string;       // e.g. "Москва, Гостиный двор"
+  stand: string;          // e.g. "Стенд Е-19"
 }
 
 export type BannerType = 'book' | 'presentation';
@@ -21,15 +22,6 @@ export type BannerFormat = 'square' | 'vertical';
 export type ColorScheme = 'yellow' | 'orange' | 'green' | 'lightblue' | 'blue' | 'gray' | 'white';
 
 export type BookStyle = 'flat' | '3d' | '3d-hardcover';
-
-export interface BannerConfig {
-  type: BannerType;
-  formats: BannerFormat[];
-  colorScheme: ColorScheme;
-  bookStyle: BookStyle;
-  book: BookData;
-  presentation?: PresentationData;
-}
 
 export const FORMAT_DIMENSIONS: Record<BannerFormat, { width: number; height: number; label: string; description: string }> = {
   square: { width: 1080, height: 1080, label: 'Квадратный', description: 'Лента VK, Telegram, TenChat' },

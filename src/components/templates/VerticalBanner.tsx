@@ -25,6 +25,7 @@ interface VerticalBannerProps {
   author: string;
   annotation: string;
   genre?: string;
+  qrUrl?: string;
   scale?: number;
 }
 
@@ -115,12 +116,15 @@ const BookCover = ({
 }) => {
   const is3D = bookStyle === '3d';
   const isHardcover = bookStyle === '3d-hardcover';
+  const coverUrl = book.coverUrl.includes('store.ridero.ru')
+    ? `/api/proxy-image?url=${encodeURIComponent(book.coverUrl)}`
+    : book.coverUrl;
 
   if (is3D) {
     return (
       <div style={{ position: 'absolute', left: left * scale, top: top * scale }}>
         <Book3D
-          coverUrl={book.coverUrl}
+          coverUrl={coverUrl}
           alt={`${title} - ${author}`}
           width={width}
           height={height}
@@ -135,7 +139,7 @@ const BookCover = ({
     return (
       <div style={{ position: 'absolute', left: left * scale, top: top * scale }}>
         <Book3DHardcover
-          coverUrl={book.coverUrl}
+          coverUrl={coverUrl}
           alt={`${title} - ${author}`}
           width={width * 0.75}
           height={height * 0.75}
@@ -162,7 +166,7 @@ const BookCover = ({
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src={book.coverUrl}
+        src={coverUrl}
         alt={`${title} - ${author}`}
         style={{ width: '100%', height: '100%', objectFit: 'cover' }}
         crossOrigin="anonymous"
@@ -188,9 +192,9 @@ const BookCover = ({
 };
 
 export const VerticalBanner = forwardRef<HTMLDivElement, VerticalBannerProps>(
-  ({ book, colorScheme, bannerType, bookStyle = 'flat', presentation, title, author, annotation, genre, scale = 0.25 }, ref) => {
+  ({ book, colorScheme, bannerType, bookStyle = 'flat', presentation, title, author, annotation, genre, qrUrl: customQrUrl, scale = 0.25 }, ref) => {
     const colors = COLOR_SCHEMES[colorScheme];
-    const qrUrl = book.freeFragmentUrl || book.bookUrl;
+    const qrUrl = customQrUrl || book.freeFragmentUrl || book.bookUrl;
     const width = 1080 * scale;
     const height = 1920 * scale;
 
@@ -370,7 +374,7 @@ export const VerticalBanner = forwardRef<HTMLDivElement, VerticalBannerProps>(
                 color: colors.text,
               }}
             >
-              Презентация моей книги на Non/fiction!
+              {presentation?.exhibitionName || 'Презентация моей книги на Non/fiction!'}
             </p>
 
             {/* Book cover */}

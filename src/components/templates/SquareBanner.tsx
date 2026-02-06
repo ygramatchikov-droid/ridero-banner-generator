@@ -25,6 +25,7 @@ interface SquareBannerProps {
   author: string;
   annotation: string;
   genre?: string;
+  qrUrl?: string;
   scale?: number;
 }
 
@@ -88,9 +89,12 @@ const WaveDecoration = ({
 };
 
 export const SquareBanner = forwardRef<HTMLDivElement, SquareBannerProps>(
-  ({ book, colorScheme, bannerType, bookStyle = 'flat', presentation, title, author, annotation, genre, scale = 0.4 }, ref) => {
+  ({ book, colorScheme, bannerType, bookStyle = 'flat', presentation, title, author, annotation, genre, qrUrl: customQrUrl, scale = 0.4 }, ref) => {
     const colors = COLOR_SCHEMES[colorScheme];
-    const qrUrl = book.freeFragmentUrl || book.bookUrl;
+    const qrUrl = customQrUrl || book.freeFragmentUrl || book.bookUrl;
+    const proxiedCoverUrl = book.coverUrl.includes('store.ridero.ru')
+      ? `/api/proxy-image?url=${encodeURIComponent(book.coverUrl)}`
+      : book.coverUrl;
     const size = 1080 * scale;
     const is3D = bookStyle === '3d';
     const isHardcover = bookStyle === '3d-hardcover';
@@ -141,7 +145,7 @@ export const SquareBanner = forwardRef<HTMLDivElement, SquareBannerProps>(
             }}
           >
             <Book3D
-              coverUrl={book.coverUrl}
+              coverUrl={proxiedCoverUrl}
               alt={title}
               width={300}
               height={420}
@@ -158,7 +162,7 @@ export const SquareBanner = forwardRef<HTMLDivElement, SquareBannerProps>(
             }}
           >
             <Book3DHardcover
-              coverUrl={book.coverUrl}
+              coverUrl={proxiedCoverUrl}
               alt={title}
               width={300}
               height={420}
@@ -182,7 +186,7 @@ export const SquareBanner = forwardRef<HTMLDivElement, SquareBannerProps>(
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={book.coverUrl}
+              src={proxiedCoverUrl}
               alt={title}
               style={{
                 width: '100%',
@@ -347,7 +351,7 @@ export const SquareBanner = forwardRef<HTMLDivElement, SquareBannerProps>(
                 color: colors.text,
               }}
             >
-              Презентация моей книги на Non/fiction!
+              {presentation?.exhibitionName || 'Презентация моей книги на Non/fiction!'}
             </p>
 
             {/* Time - Figma: x=600, y=376, h=72 */}

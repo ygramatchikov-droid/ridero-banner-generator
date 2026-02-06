@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import html2canvas from 'html2canvas';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
@@ -29,7 +29,9 @@ export function Step6Download() {
     editedTitle,
     editedAuthor,
     editedAnnotation,
+    qrUrl,
     reset,
+    prevStep,
   } = useBannerStore();
 
   const [isGenerating, setIsGenerating] = useState(true);
@@ -46,6 +48,19 @@ export function Step6Download() {
     vertical: verticalRef,
   };
 
+  // Wait for all images inside a container to load
+  const waitForImages = useCallback(async (container: HTMLElement) => {
+    const images = container.querySelectorAll('img');
+    const promises = Array.from(images).map((img) => {
+      if (img.complete) return Promise.resolve();
+      return new Promise<void>((resolve) => {
+        img.onload = () => resolve();
+        img.onerror = () => resolve(); // Don't block on failed images
+      });
+    });
+    await Promise.all(promises);
+  }, []);
+
   useEffect(() => {
     const generateBanners = async () => {
       if (!bookData) return;
@@ -53,8 +68,12 @@ export function Step6Download() {
       setIsGenerating(true);
       setError(null);
 
-      // Wait for images to load
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      // Wait for all images to actually load
+      const containers = [squareRef.current, verticalRef.current].filter(Boolean) as HTMLElement[];
+      await Promise.all(containers.map(waitForImages));
+
+      // Small extra delay for rendering
+      await new Promise((resolve) => setTimeout(resolve, 300));
 
       const banners: GeneratedBanner[] = [];
 
@@ -70,20 +89,24 @@ export function Step6Download() {
             height,
             scale: 1,
             useCORS: true,
-            allowTaint: true,
+            allowTaint: false,
             backgroundColor: null,
             logging: false,
           });
 
-          const dataUrl = canvas.toDataURL('image/png');
-          const blob = await new Promise<Blob>((resolve) => {
-            canvas.toBlob((b) => resolve(b!), 'image/png');
+          const blob = await new Promise<Blob>((resolve, reject) => {
+            canvas.toBlob((b) => {
+              if (b) resolve(b);
+              else reject(new Error('Failed to create image blob'));
+            }, 'image/png');
           });
+
+          const previewUrl = URL.createObjectURL(blob);
 
           banners.push({
             format,
             blob,
-            previewUrl: dataUrl,
+            previewUrl,
           });
         } catch (err) {
           console.error(`Failed to generate ${format} banner:`, err);
@@ -96,6 +119,11 @@ export function Step6Download() {
     };
 
     generateBanners();
+
+    // Cleanup object URLs on unmount
+    return () => {
+      generatedBanners.forEach((b) => URL.revokeObjectURL(b.previewUrl));
+    };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleDownloadSingle = (banner: GeneratedBanner) => {
@@ -121,6 +149,10 @@ export function Step6Download() {
     reset();
   };
 
+  const handleRetry = () => {
+    prevStep();
+  };
+
   if (!bookData) return null;
 
   const bannerProps = {
@@ -133,6 +165,7 @@ export function Step6Download() {
     author: editedAuthor,
     annotation: editedAnnotation,
     genre: bookData.genre,
+    qrUrl,
   };
 
   return (
@@ -169,7 +202,10 @@ export function Step6Download() {
               Что-то пошло не так
             </h1>
             <p className="text-red-600 mb-6">{error}</p>
-            <Button onClick={handleReset}>Попробовать снова</Button>
+            <div className="flex gap-4 justify-center">
+              <Button variant="outline" onClick={handleRetry}>Назад к редактированию</Button>
+              <Button onClick={handleReset}>Начать заново</Button>
+            </div>
           </>
         ) : (
           <>

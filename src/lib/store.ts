@@ -1,6 +1,7 @@
 'use client';
 
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 import { BookData, BannerType, BannerFormat, ColorScheme, BookStyle, PresentationData } from './types';
 
 interface BannerStore {
@@ -8,7 +9,7 @@ interface BannerStore {
   bookUrl: string;
   setBookUrl: (url: string) => void;
 
-  // Book data (from API/mock)
+  // Book data (from API)
   bookData: BookData | null;
   setBookData: (data: BookData | null) => void;
 
@@ -40,6 +41,10 @@ interface BannerStore {
   bookStyle: BookStyle;
   setBookStyle: (style: BookStyle) => void;
 
+  // QR link (user-specified)
+  qrUrl: string;
+  setQrUrl: (url: string) => void;
+
   // Navigation
   currentStep: number;
   setCurrentStep: (step: number) => void;
@@ -52,55 +57,71 @@ interface BannerStore {
 
 const initialState = {
   bookUrl: '',
-  bookData: null,
+  bookData: null as BookData | null,
   editedTitle: '',
   editedAuthor: '',
   editedAnnotation: '',
   bannerType: 'book' as BannerType,
-  presentationData: { time: '', location: '', stand: '' },
+  presentationData: {
+    exhibitionName: '',
+    time: '',
+    location: '',
+    stand: '',
+  },
   selectedFormats: ['square'] as BannerFormat[],
   colorScheme: 'yellow' as ColorScheme,
   bookStyle: '3d' as BookStyle,
+  qrUrl: '',
   currentStep: 1,
 };
 
-export const useBannerStore = create<BannerStore>((set, get) => ({
-  ...initialState,
+export const useBannerStore = create<BannerStore>()(
+  persist(
+    (set) => ({
+      ...initialState,
 
-  setBookUrl: (url) => set({ bookUrl: url }),
+      setBookUrl: (url) => set({ bookUrl: url }),
 
-  setBookData: (data) => set({
-    bookData: data,
-    editedTitle: data?.title || '',
-    editedAuthor: data?.author || '',
-    editedAnnotation: data?.annotation || '',
-  }),
+      setBookData: (data) => set({
+        bookData: data,
+        editedTitle: data?.title || '',
+        editedAuthor: data?.author || '',
+        editedAnnotation: data?.annotation || '',
+        qrUrl: data?.freeFragmentUrl || data?.bookUrl || '',
+      }),
 
-  setEditedTitle: (title) => set({ editedTitle: title }),
-  setEditedAuthor: (author) => set({ editedAuthor: author }),
-  setEditedAnnotation: (annotation) => set({ editedAnnotation: annotation.slice(0, 200) }),
+      setEditedTitle: (title) => set({ editedTitle: title }),
+      setEditedAuthor: (author) => set({ editedAuthor: author }),
+      setEditedAnnotation: (annotation) => set({ editedAnnotation: annotation.slice(0, 200) }),
 
-  setBannerType: (type) => set({ bannerType: type }),
+      setBannerType: (type) => set({ bannerType: type }),
 
-  setPresentationData: (data) => set((state) => ({
-    presentationData: { ...state.presentationData, ...data },
-  })),
+      setPresentationData: (data) => set((state) => ({
+        presentationData: { ...state.presentationData, ...data },
+      })),
 
-  toggleFormat: (format) => set((state) => {
-    const formats = state.selectedFormats.includes(format)
-      ? state.selectedFormats.filter(f => f !== format)
-      : [...state.selectedFormats, format];
-    return { selectedFormats: formats.length > 0 ? formats : [format] };
-  }),
+      toggleFormat: (format) => set((state) => {
+        const formats = state.selectedFormats.includes(format)
+          ? state.selectedFormats.filter(f => f !== format)
+          : [...state.selectedFormats, format];
+        return { selectedFormats: formats.length > 0 ? formats : [format] };
+      }),
 
-  setColorScheme: (scheme) => set({ colorScheme: scheme }),
+      setColorScheme: (scheme) => set({ colorScheme: scheme }),
+      setBookStyle: (style) => set({ bookStyle: style }),
 
-  setBookStyle: (style) => set({ bookStyle: style }),
+      qrUrl: '',
+      setQrUrl: (url) => set({ qrUrl: url }),
 
-  currentStep: 1,
-  setCurrentStep: (step) => set({ currentStep: step }),
-  nextStep: () => set((state) => ({ currentStep: Math.min(state.currentStep + 1, 6) })),
-  prevStep: () => set((state) => ({ currentStep: Math.max(state.currentStep - 1, 1) })),
+      currentStep: 1,
+      setCurrentStep: (step) => set({ currentStep: step }),
+      nextStep: () => set((state) => ({ currentStep: Math.min(state.currentStep + 1, 6) })),
+      prevStep: () => set((state) => ({ currentStep: Math.max(state.currentStep - 1, 1) })),
 
-  reset: () => set(initialState),
-}));
+      reset: () => set(initialState),
+    }),
+    {
+      name: 'ridero-banner-store',
+    }
+  )
+);
