@@ -166,11 +166,11 @@ export function Step5Preview() {
         </div>
       </div>
 
-      <div className="flex gap-4 mt-8">
-        <Button variant="outline" size="lg" onClick={prevStep} className="flex-1">
+      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-8">
+        <Button variant="outline" size="lg" onClick={prevStep} className="w-full sm:flex-1 order-2 sm:order-1">
           Назад
         </Button>
-        <Button size="lg" onClick={nextStep} className="flex-1">
+        <Button size="lg" onClick={nextStep} className="w-full sm:flex-1 order-1 sm:order-2">
           Сгенерировать баннеры
         </Button>
       </div>
