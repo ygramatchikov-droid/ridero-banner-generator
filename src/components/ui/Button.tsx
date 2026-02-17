@@ -11,7 +11,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className = '', variant = 'primary', size = 'md', children, disabled, ...props }, ref) => {
     const baseStyles = `
       inline-flex items-center justify-center
-      font-bold uppercase
+      font-normal
       transition-all duration-200
       focus:outline-none focus:ring-2 focus:ring-offset-2
       disabled:cursor-not-allowed disabled:!bg-[#FFD8B3] disabled:!border-[#FFD8B3] disabled:!text-white
@@ -37,11 +37,11 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       `.replace(/\s+/g, ' ').trim(),
     };
 
-    // Ridero sizes: lg=48px, md=40px, sm=32px height
+    // All buttons 48px on mobile; on desktop: sm=32, md=40, lg=48
     const sizes = {
-      sm: 'h-8 px-4 text-xs rounded-sm',      // 32px height
-      md: 'h-10 px-6 text-sm rounded-sm',     // 40px height
-      lg: 'h-12 px-8 text-base rounded-sm',   // 48px height
+      sm: 'h-12 sm:h-8 px-4 rounded-sm',
+      md: 'h-12 sm:h-10 px-6 rounded-sm',
+      lg: 'h-12 px-8 rounded-sm',
     };
 
     return (
@@ -49,9 +49,10 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`}
         style={{
-          fontFamily: "'PT Sans Caption', sans-serif",
+          fontFamily: "'PT Sans', 'Helvetica Neue', sans-serif",
+          fontSize: '18px',
+          lineHeight: '24px',
           borderRadius: '2px',
-          letterSpacing: '2px',
         }}
         disabled={disabled}
         {...props}
