@@ -1,5 +1,6 @@
 'use client';
 
+import { useRef, useState, useEffect } from 'react';
 import { useBannerStore } from '@/lib/store';
 import { Button, Input } from '@/components/ui';
 import { SquareBanner, VerticalBanner } from '@/components/templates';
@@ -9,7 +10,6 @@ export function Step5Preview() {
   const {
     bookData,
     bannerType,
-    bookStyle,
     selectedFormats,
     colorScheme,
     presentationData,
@@ -26,6 +26,28 @@ export function Step5Preview() {
     nextStep,
   } = useBannerStore();
 
+  // Responsive scale: measure preview container width
+  const previewRef = useRef<HTMLDivElement>(null);
+  const [previewScale, setPreviewScale] = useState(0.35);
+
+  useEffect(() => {
+    const el = previewRef.current;
+    if (!el) return;
+
+    const updateScale = () => {
+      // Available width minus padding (p-4 = 32px total)
+      const available = el.clientWidth - 32;
+      // Banner base width is 1080; clamp scale between 0.22 and 0.4
+      const scale = Math.min(0.4, Math.max(0.22, available / 1080));
+      setPreviewScale(scale);
+    };
+
+    updateScale();
+    const observer = new ResizeObserver(updateScale);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   if (!bookData) return null;
 
   const renderBannerPreview = (format: BannerFormat) => {
@@ -33,43 +55,41 @@ export function Step5Preview() {
       book: bookData,
       colorScheme,
       bannerType,
-      bookStyle,
       presentation: presentationData,
       title: editedTitle,
       author: editedAuthor,
       annotation: editedAnnotation,
-      genre: bookData.genre,
       qrUrl,
     };
 
     switch (format) {
       case 'square':
-        return <SquareBanner {...props} scale={0.35} />;
+        return <SquareBanner {...props} scale={previewScale} />;
       case 'vertical':
-        return <VerticalBanner {...props} scale={0.2} />;
+        return <VerticalBanner {...props} scale={previewScale} />;
     }
   };
 
   return (
     <div className="max-w-6xl mx-auto">
       <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-3">
-          Предпросмотр и редактирование
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3" style={{ fontFamily: "'PT Serif', serif" }}>
+          Предпросмотр и{'\u00A0'}редактирование
         </h1>
         <p className="text-gray-600 text-lg">
-          Проверьте баннер и при необходимости отредактируйте текст
+          Проверьте баннер и{'\u00A0'}при необходимости отредактируйте текст
         </p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Preview section */}
-        <div className="space-y-6">
-          <h2 className="font-semibold text-gray-900">Превью</h2>
+        <div className="space-y-6" ref={previewRef}>
+          <h2 className="font-bold text-gray-900 uppercase" style={{ fontFamily: "'PT Sans Caption', sans-serif", fontSize: '18px', lineHeight: '24px', letterSpacing: '2px' }}>Превью</h2>
           <div className="flex flex-wrap gap-4 justify-center">
             {selectedFormats.map((format) => (
               <div
                 key={format}
-                className="bg-gray-100 rounded-xl p-4 inline-block"
+                className={`rounded-xl p-4 inline-block ${colorScheme === 'white' ? 'bg-gray-100' : 'bg-white'}`}
               >
                 {renderBannerPreview(format)}
               </div>
@@ -79,94 +99,78 @@ export function Step5Preview() {
 
         {/* Edit section */}
         <div className="space-y-6">
-          <h2 className="font-semibold text-gray-900">Редактирование</h2>
-
-          <Input
-            label="Название книги"
-            value={editedTitle}
-            onChange={(e) => setEditedTitle(e.target.value)}
-          />
-
-          <Input
-            label="Автор"
-            value={editedAuthor}
-            onChange={(e) => setEditedAuthor(e.target.value)}
-          />
+          <h2 className="font-bold text-gray-900 uppercase" style={{ fontFamily: "'PT Sans Caption', sans-serif", fontSize: '18px', lineHeight: '24px', letterSpacing: '2px' }}>Редактирование</h2>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Аннотация (до 200 знаков)
+              Аннотация (до{'\u00A0'}160 знаков)
             </label>
             <textarea
               value={editedAnnotation}
               onChange={(e) => setEditedAnnotation(e.target.value)}
-              maxLength={200}
+              maxLength={160}
               rows={4}
               className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#FF7E00] transition-colors resize-none"
             />
             <p className="text-sm text-gray-500 mt-1">
-              {editedAnnotation.length}/200 знаков
+              {editedAnnotation.length}/160 знаков
             </p>
           </div>
 
+          {bannerType === 'book' && (
+            <Input
+              label="Ссылка для QR-кода"
+              placeholder="https://ridero.ru/books/your-book/read/"
+              value={qrUrl}
+              onChange={(e) => setQrUrl(e.target.value)}
+            />
+          )}
+
           <Input
-            label="Ссылка для QR-кода"
-            placeholder="https://ridero.ru/books/your-book/read/"
-            value={qrUrl}
-            onChange={(e) => setQrUrl(e.target.value)}
+            label="Название мероприятия"
+            placeholder="Non/fiction"
+            value={presentationData.exhibitionName}
+            onChange={(e) =>
+              setPresentationData({ exhibitionName: e.target.value })
+            }
           />
 
           {bannerType === 'presentation' && (
-            <>
-              <div className="border-t pt-6">
-                <h3 className="font-medium text-gray-900 mb-4">
-                  Данные презентации
-                </h3>
-                <div className="space-y-4">
-                  <Input
-                    label="Название мероприятия"
-                    placeholder="Презентация моей книги на Non/fiction!"
-                    value={presentationData.exhibitionName}
-                    onChange={(e) =>
-                      setPresentationData({ exhibitionName: e.target.value })
-                    }
-                  />
-                  <Input
-                    label="Время"
-                    placeholder="14:30–15:00"
-                    value={presentationData.time}
-                    onChange={(e) =>
-                      setPresentationData({ time: e.target.value })
-                    }
-                  />
-                  <Input
-                    label="Место"
-                    placeholder="Москва, Гостиный двор"
-                    value={presentationData.location}
-                    onChange={(e) =>
-                      setPresentationData({ location: e.target.value })
-                    }
-                  />
-                  <Input
-                    label="Стенд"
-                    placeholder="Стенд Е-19"
-                    value={presentationData.stand}
-                    onChange={(e) =>
-                      setPresentationData({ stand: e.target.value })
-                    }
-                  />
-                </div>
-              </div>
-            </>
+            <Input
+              label="Время"
+              placeholder="14:30–15:00"
+              value={presentationData.time}
+              onChange={(e) =>
+                setPresentationData({ time: e.target.value })
+              }
+            />
           )}
+
+          <Input
+            label="Место"
+            placeholder="Москва, Гостиный двор"
+            value={presentationData.location}
+            onChange={(e) =>
+              setPresentationData({ location: e.target.value })
+            }
+          />
+
+          <Input
+            label="Стенд"
+            placeholder="Стенд Е-32"
+            value={presentationData.stand}
+            onChange={(e) =>
+              setPresentationData({ stand: e.target.value })
+            }
+          />
         </div>
       </div>
 
       <div className="flex gap-4 mt-8">
-        <Button variant="outline" onClick={prevStep} className="flex-1">
+        <Button variant="outline" size="lg" onClick={prevStep} className="flex-1">
           Назад
         </Button>
-        <Button onClick={nextStep} className="flex-1">
+        <Button size="lg" onClick={nextStep} className="flex-1">
           Сгенерировать баннеры
         </Button>
       </div>

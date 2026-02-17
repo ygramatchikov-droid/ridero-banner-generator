@@ -13,7 +13,7 @@ import {
 } from '@/components/steps';
 
 export default function Home() {
-  const { currentStep, setCurrentStep, reset } = useBannerStore();
+  const { currentStep, setCurrentStep } = useBannerStore();
 
   // Sync step to URL hash and handle browser back/forward
   useEffect(() => {
@@ -53,12 +53,6 @@ export default function Home() {
     return () => window.removeEventListener('popstate', handlePopState);
   }, [setCurrentStep]);
 
-  const handleLogoClick = () => {
-    if (confirm('Сбросить все данные и начать заново?')) {
-      reset();
-    }
-  };
-
   const renderStep = () => {
     switch (currentStep) {
       case 1:
@@ -79,37 +73,15 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-gray-50 pb-20">
-      {/* Header */}
-      <header className="bg-white border-b border-gray-100">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-          <button
-            type="button"
-            onClick={handleLogoClick}
-            className="flex items-center gap-2 hover:opacity-80 transition-opacity"
-          >
-            <span className="text-xl font-bold text-gray-900">Ridero</span>
-            <span className="text-gray-400">|</span>
-            <span className="text-gray-600">Генератор баннеров</span>
-          </button>
-        </div>
-      </header>
-
+    <main className="min-h-screen bg-gray-50">
       {/* Main content */}
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="max-w-7xl mx-auto px-5 md:px-8 py-8">
         {currentStep < 6 && (
           <StepIndicator currentStep={currentStep} totalSteps={5} />
         )}
 
         {renderStep()}
       </div>
-
-      {/* Footer */}
-      <footer className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 py-3">
-        <div className="max-w-7xl mx-auto px-4 text-center text-sm text-gray-500">
-          Ridero &copy; {new Date().getFullYear()} &bull; Генератор баннеров для авторов
-        </div>
-      </footer>
     </main>
   );
 }

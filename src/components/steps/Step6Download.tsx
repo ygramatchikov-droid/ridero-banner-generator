@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect, useCallback } from 'react';
-import html2canvas from 'html2canvas';
+import { domToBlob } from 'modern-screenshot';
 import JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 import { useBannerStore } from '@/lib/store';
@@ -24,7 +24,6 @@ export function Step6Download() {
     bannerType,
     selectedFormats,
     colorScheme,
-    bookStyle,
     presentationData,
     editedTitle,
     editedAuthor,
@@ -51,14 +50,15 @@ export function Step6Download() {
   // Wait for all images inside a container to load
   const waitForImages = useCallback(async (container: HTMLElement) => {
     const images = container.querySelectorAll('img');
-    const promises = Array.from(images).map((img) => {
-      if (img.complete) return Promise.resolve();
-      return new Promise<void>((resolve) => {
-        img.onload = () => resolve();
-        img.onerror = () => resolve(); // Don't block on failed images
-      });
-    });
-    await Promise.all(promises);
+    await Promise.all(
+      Array.from(images).map((img) => {
+        if (img.complete) return Promise.resolve();
+        return new Promise<void>((resolve) => {
+          img.onload = () => resolve();
+          img.onerror = () => resolve();
+        });
+      })
+    );
   }, []);
 
   useEffect(() => {
@@ -68,12 +68,15 @@ export function Step6Download() {
       setIsGenerating(true);
       setError(null);
 
-      // Wait for all images to actually load
+      // Wait for banner DOM to render
+      await new Promise((resolve) => setTimeout(resolve, 300));
+
+      // Wait for all images to load
       const containers = [squareRef.current, verticalRef.current].filter(Boolean) as HTMLElement[];
       await Promise.all(containers.map(waitForImages));
 
-      // Small extra delay for rendering
-      await new Promise((resolve) => setTimeout(resolve, 300));
+      // Extra delay for rendering (fonts, SVGs)
+      await new Promise((resolve) => setTimeout(resolve, 800));
 
       const banners: GeneratedBanner[] = [];
 
@@ -84,22 +87,23 @@ export function Step6Download() {
         try {
           const { width, height } = FORMAT_DIMENSIONS[format];
 
-          const canvas = await html2canvas(ref.current, {
+          const blob = await domToBlob(ref.current, {
             width,
             height,
             scale: 1,
-            useCORS: true,
-            allowTaint: false,
-            backgroundColor: null,
-            logging: false,
+            style: {
+              transform: 'none',
+              transformOrigin: 'top left',
+            },
+            fetch: {
+              requestInit: {
+                mode: 'cors',
+              },
+              bypassingCache: true,
+            },
           });
 
-          const blob = await new Promise<Blob>((resolve, reject) => {
-            canvas.toBlob((b) => {
-              if (b) resolve(b);
-              else reject(new Error('Failed to create image blob'));
-            }, 'image/png');
-          });
+          if (!blob) throw new Error('Failed to create image blob');
 
           const previewUrl = URL.createObjectURL(blob);
 
@@ -110,7 +114,7 @@ export function Step6Download() {
           });
         } catch (err) {
           console.error(`Failed to generate ${format} banner:`, err);
-          setError(`Ошибка при генерации баннера. Попробуйте ещё раз.`);
+          setError(`Ошибка при\u00A0генерации баннера. Попробуйте еще раз.`);
         }
       }
 
@@ -159,12 +163,10 @@ export function Step6Download() {
     book: bookData,
     colorScheme,
     bannerType,
-    bookStyle,
     presentation: presentationData,
     title: editedTitle,
     author: editedAuthor,
     annotation: editedAnnotation,
-    genre: bookData.genre,
     qrUrl,
   };
 
@@ -186,11 +188,11 @@ export function Step6Download() {
             <div className="flex justify-center mb-6">
               <div className="w-16 h-16 border-4 border-[#FF7E00] border-t-transparent rounded-full animate-spin" />
             </div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-3">
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3" style={{ fontFamily: "'PT Serif', serif" }}>
               Генерируем баннеры...
             </h1>
             <p className="text-gray-600 text-lg">
-              Это займёт несколько секунд
+              Это займет несколько секунд
             </p>
           </>
         ) : error ? (
@@ -198,13 +200,13 @@ export function Step6Download() {
             <div className="flex justify-center mb-4 text-red-500">
               <AlertIcon size={48} />
             </div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-3">
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3" style={{ fontFamily: "'PT Serif', serif" }}>
               Что-то пошло не так
             </h1>
             <p className="text-red-600 mb-6">{error}</p>
             <div className="flex gap-4 justify-center">
-              <Button variant="outline" onClick={handleRetry}>Назад к редактированию</Button>
-              <Button onClick={handleReset}>Начать заново</Button>
+              <Button variant="outline" size="lg" onClick={handleRetry}>Назад к{'\u00A0'}редактированию</Button>
+              <Button size="lg" onClick={handleReset}>Начать заново</Button>
             </div>
           </>
         ) : (
@@ -212,11 +214,11 @@ export function Step6Download() {
             <div className="flex justify-center mb-4 text-green-500">
               <CheckCircleIcon size={48} />
             </div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-3">
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3" style={{ fontFamily: "'PT Serif', serif" }}>
               Баннеры готовы!
             </h1>
             <p className="text-gray-600 text-lg">
-              Скачайте баннеры для публикации в соцсетях
+              Скачайте баннеры для{'\u00A0'}публикации в{'\u00A0'}соцсетях
             </p>
           </>
         )}
@@ -225,32 +227,31 @@ export function Step6Download() {
       {!isGenerating && !error && (
         <>
           {/* Banner previews */}
-          <div className="grid gap-6 mb-8">
+          <div className={`grid gap-6 mb-8 ${generatedBanners.length > 1 ? 'grid-cols-1 sm:grid-cols-2' : 'max-w-sm mx-auto'}`}>
             {generatedBanners.map((banner) => {
               const { width, height, label, description } = FORMAT_DIMENSIONS[banner.format];
 
               return (
                 <div
                   key={banner.format}
-                  className="bg-white rounded-2xl border border-gray-100 p-6 flex items-center gap-6"
+                  className="bg-white rounded-2xl border border-gray-100 p-4 flex flex-col items-center text-center"
                 >
-                  <div className="bg-gray-100 rounded-xl p-2 flex-shrink-0">
+                  <div className={`rounded-xl p-3 mb-4 w-full flex justify-center ${colorScheme === 'white' ? 'bg-gray-100' : 'bg-white'}`}>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={banner.previewUrl}
                       alt={label}
-                      className="h-24 w-auto rounded-lg"
+                      className="w-full h-auto sm:w-auto sm:max-h-56 rounded-lg"
                     />
                   </div>
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-gray-900">{label}</h3>
-                    <p className="text-sm text-gray-500">
-                      {width}×{height} px • {description}
-                    </p>
-                  </div>
+                  <h3 className="font-semibold text-gray-900">{label}</h3>
+                  <p className="text-sm text-gray-500 mb-3">
+                    {width}×{height}{'\u00A0'}px · {description}
+                  </p>
                   <Button
                     variant="outline"
                     onClick={() => handleDownloadSingle(banner)}
+                    className="w-full"
                   >
                     Скачать PNG
                   </Button>
@@ -259,22 +260,18 @@ export function Step6Download() {
             })}
           </div>
 
-          {/* Download all button */}
-          {generatedBanners.length > 1 && (
-            <div className="text-center mb-8">
-              <Button size="lg" onClick={handleDownloadAll}>
-                <span className="flex items-center gap-2">
+          {/* Action buttons */}
+          <div className="flex flex-col gap-3 max-w-md mx-auto">
+            {generatedBanners.length > 1 && (
+              <Button size="lg" onClick={handleDownloadAll} className="w-full">
+                <span className="flex items-center justify-center gap-2">
                   <ArchiveIcon size={20} />
-                  Скачать всё архивом (ZIP)
+                  Скачать все (ZIP)
                 </span>
               </Button>
-            </div>
-          )}
-
-          {/* Create new button */}
-          <div className="text-center">
-            <Button variant="secondary" onClick={handleReset}>
-              <span className="flex items-center gap-2">
+            )}
+            <Button variant="outline" size="lg" onClick={handleReset} className="w-full">
+              <span className="flex items-center justify-center gap-2">
                 <RefreshIcon size={20} />
                 Создать новый баннер
               </span>

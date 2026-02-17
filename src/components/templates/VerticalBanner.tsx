@@ -11,192 +11,52 @@ import {
   TYPOGRAPHY,
   SHADOWS,
   BOOK_COVER_OVERLAY,
-  BookStyle,
 } from '@/lib/types';
-import { Book3D, Book3DHardcover } from '@/components/Book3D';
 
 interface VerticalBannerProps {
   book: BookData;
   colorScheme: ColorScheme;
   bannerType: BannerType;
-  bookStyle?: BookStyle;
   presentation?: PresentationData;
   title: string;
   author: string;
   annotation: string;
-  genre?: string;
   qrUrl?: string;
   scale?: number;
 }
 
-// Location icon SVG
-const LocationIcon = ({ color, size }: { color: string; size: number }) => (
-  <svg width={size} height={size} viewBox="0 0 48 48" fill="none">
-    <path
-      d="M24 4C16.268 4 10 10.268 10 18c0 10.5 14 26 14 26s14-15.5 14-26c0-7.732-6.268-14-14-14zm0 19a5 5 0 110-10 5 5 0 010 10z"
-      fill={color}
-    />
-  </svg>
-);
-
-// Stand/booth icon SVG
-const StandIcon = ({ color, size }: { color: string; size: number }) => (
-  <svg width={size} height={size} viewBox="0 0 48 48" fill="none">
-    <rect x="8" y="12" width="32" height="24" rx="2" stroke={color} strokeWidth="3" fill="none" />
-    <path d="M8 20h32" stroke={color} strokeWidth="3" />
-    <rect x="14" y="24" width="8" height="8" rx="1" fill={color} />
-    <rect x="26" y="24" width="8" height="8" rx="1" fill={color} />
-  </svg>
-);
-
-// Wave decoration component
-const WaveDecoration = ({
-  color,
-  scale,
-  position,
-}: {
-  color: string;
-  scale: number;
-  position: 'topLeft' | 'topRight' | 'bottomRight' | 'bottomLeft';
-}) => {
-  const size = 932 * scale;
-  // Figma exact positions for wave decorations
-  const positions = {
-    topLeft: { left: -371 * scale, top: 181 * scale },
-    topRight: { left: 519 * scale, top: -245 * scale },
-    bottomRight: { left: 448 * scale, top: 774 * scale },
-    bottomLeft: { left: -400 * scale, top: 1200 * scale },
-  };
-  const pos = positions[position];
-
-  return (
-    <div
-      style={{
-        position: 'absolute',
-        left: pos.left,
-        top: pos.top,
-        width: size,
-        height: size * 0.89,
-        opacity: 0.3,
-      }}
-    >
-      <svg viewBox="0 0 932 834" fill="none" style={{ width: '100%', height: '100%' }}>
-        <path
-          d="M0 417C0 186.7 186.7 0 417 0h98c230.3 0 417 186.7 417 417s-186.7 417-417 417h-98C186.7 834 0 647.3 0 417z"
-          fill={color}
-        />
-      </svg>
-    </div>
-  );
-};
-
-// Book cover component for reuse
-const BookCover = ({
-  book,
-  title,
-  author,
-  bookStyle,
-  scale,
-  width,
-  height,
-  left,
-  top,
-  bgColor,
-}: {
-  book: BookData;
-  title: string;
-  author: string;
-  bookStyle: BookStyle;
-  scale: number;
-  width: number;
-  height: number;
-  left: number;
-  top: number;
-  bgColor: string;
-}) => {
-  const is3D = bookStyle === '3d';
-  const isHardcover = bookStyle === '3d-hardcover';
-  const coverUrl = book.coverUrl.includes('store.ridero.ru')
-    ? `/api/proxy-image?url=${encodeURIComponent(book.coverUrl)}`
-    : book.coverUrl;
-
-  if (is3D) {
-    return (
-      <div style={{ position: 'absolute', left: left * scale, top: top * scale }}>
-        <Book3D
-          coverUrl={coverUrl}
-          alt={`${title} - ${author}`}
-          width={width}
-          height={height}
-          scale={scale}
-          angle={12}
-        />
-      </div>
-    );
-  }
-
-  if (isHardcover) {
-    return (
-      <div style={{ position: 'absolute', left: left * scale, top: top * scale }}>
-        <Book3DHardcover
-          coverUrl={coverUrl}
-          alt={`${title} - ${author}`}
-          width={width * 0.75}
-          height={height * 0.75}
-          scale={scale}
-          angle={18}
-          bgColor={bgColor}
-        />
-      </div>
-    );
-  }
-
-  return (
-    <div
-      style={{
-        position: 'absolute',
-        left: left * scale,
-        top: top * scale,
-        width: width * scale,
-        height: height * scale,
-        borderRadius: `${2 * scale}px ${8 * scale}px ${8 * scale}px ${2 * scale}px`,
-        boxShadow: SHADOWS.bookCoverLarge,
-        overflow: 'hidden',
-      }}
-    >
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={coverUrl}
-        alt={`${title} - ${author}`}
-        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-        crossOrigin="anonymous"
-      />
-      <div
-        style={{
-          position: 'absolute',
-          inset: 0,
-          backgroundImage: BOOK_COVER_OVERLAY.multiply,
-          mixBlendMode: 'multiply',
-        }}
-      />
-      <div
-        style={{
-          position: 'absolute',
-          inset: 0,
-          backgroundImage: BOOK_COVER_OVERLAY.lighten,
-          mixBlendMode: 'lighten',
-        }}
-      />
-    </div>
-  );
+const BACKGROUND_MAP: Record<ColorScheme, string> = {
+  yellow: '/assets/Фон желтый, вертикальный.svg',
+  lightblue: '/assets/Фон голубой, вертикальный.svg',
+  mint: '/assets/Фон мятный, вертикальный.svg',
+  pink: '/assets/Фон розовый, вертикальный.svg',
+  white: '/assets/Фон белый, вертикальный.svg',
+  dark: '/assets/Фон темный, вертикальный.svg',
 };
 
 export const VerticalBanner = forwardRef<HTMLDivElement, VerticalBannerProps>(
-  ({ book, colorScheme, bannerType, bookStyle = 'flat', presentation, title, author, annotation, genre, qrUrl: customQrUrl, scale = 0.25 }, ref) => {
+  ({ book, colorScheme, bannerType, presentation, title, annotation, qrUrl: customQrUrl, scale = 0.4 }, ref) => {
     const colors = COLOR_SCHEMES[colorScheme];
     const qrUrl = customQrUrl || book.freeFragmentUrl || book.bookUrl;
+    const proxiedCoverUrl = book.coverUrl.startsWith('http')
+      ? `/api/proxy-image?url=${encodeURIComponent(book.coverUrl)}`
+      : book.coverUrl;
     const width = 1080 * scale;
     const height = 1920 * scale;
+    const backgroundSvg = BACKGROUND_MAP[colorScheme];
+    const logoSvg = colors.logoVariant === 'white' ? '/assets/Лого белый.svg' : '/assets/Лого черный.svg';
+    const locationIcon = colors.logoVariant === 'white' ? '/assets/Место, белый.svg' : '/assets/Место, черный.svg';
+    const standIcon = colors.logoVariant === 'white' ? '/assets/Стенд, белый.svg' : '/assets/Стенд, черный.svg';
+
+    const exhibitionName = presentation?.exhibitionName || 'Non/fiction';
+    const bannerTitle = bannerType === 'book'
+      ? `Моя книга на\u00A0${exhibitionName}!`
+      : `Презентация моей книги на\u00A0${exhibitionName}!`;
+
+    // Book cover dimensions differ between book and presentation types
+    const coverLayout = bannerType === 'book'
+      ? { x: 80, y: 496, w: 680, h: 960 }    // Figma: 8541:1262
+      : { x: 80, y: 368, w: 624, h: 872 };    // Figma: 8335:1145
 
     return (
       <div
@@ -204,271 +64,264 @@ export const VerticalBanner = forwardRef<HTMLDivElement, VerticalBannerProps>(
         style={{
           width,
           height,
-          backgroundColor: colors.bg,
           position: 'relative',
           overflow: 'hidden',
+          backgroundImage: `url('${backgroundSvg}')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
         }}
       >
-        {/* Wave decorations */}
-        <WaveDecoration color={colors.wave} scale={scale} position="topLeft" />
-        <WaveDecoration color={colors.wave} scale={scale} position="topRight" />
-        <WaveDecoration color={colors.wave} scale={scale} position="bottomRight" />
-
-        {/* Ridero logo - Figma: x=886, y=64, w=130, h=40 → right=64 */}
+        {/* Figma: Rideró logo — right=64, top=64, w=130, h=40 */}
         <div
           style={{
             position: 'absolute',
-            top: 64 * scale,
             right: 64 * scale,
+            top: 64 * scale,
             width: 130 * scale,
             height: 40 * scale,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'flex-end',
-            ...TYPOGRAPHY.heading,
-            fontSize: 32 * scale,
-            letterSpacing: 2 * scale,
-            color: colors.logoVariant === 'white' ? '#FFFFFF' : '#000000',
           }}
         >
-          Ridero
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={logoSvg}
+            alt="Rideró"
+            style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+          />
         </div>
 
+        {/* Figma: Banner title — x=80, bottom-aligned to y=304, PT Serif Bold 60px, w=664 */}
+        <p
+          style={{
+            position: 'absolute',
+            left: 80 * scale,
+            bottom: (1920 - 304) * scale,
+            width: 664 * scale,
+            ...TYPOGRAPHY.title,
+            fontWeight: 700,
+            fontSize: 60 * scale,
+            lineHeight: `${72 * scale}px`,
+            color: colors.text,
+          }}
+        >
+          {bannerTitle}
+        </p>
+
+        {/* Figma: Location + Stand row — x=80, y=336, h=48, gap=32 between groups (book type only) */}
+        {bannerType === 'book' && (
+          <div
+            style={{
+              position: 'absolute',
+              left: 80 * scale,
+              top: 336 * scale,
+              display: 'flex',
+              alignItems: 'center',
+              gap: 32 * scale,
+            }}
+          >
+            {/* Location: icon 48x48 + text, inner gap=16 */}
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 * scale }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={locationIcon} alt="" style={{ width: 48 * scale, height: 48 * scale, flexShrink: 0 }} />
+              <p
+                style={{
+                  ...TYPOGRAPHY.body,
+                  fontSize: 34 * scale,
+                  lineHeight: `${48 * scale}px`,
+                  color: colors.text,
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                {presentation?.location || 'Москва, Гостиный двор'}
+              </p>
+            </div>
+
+            {/* Stand: icon 48x48 + text, inner gap=16 */}
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 * scale }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={standIcon} alt="" style={{ width: 48 * scale, height: 48 * scale, flexShrink: 0 }} />
+              <p
+                style={{
+                  ...TYPOGRAPHY.body,
+                  fontSize: 34 * scale,
+                  lineHeight: `${48 * scale}px`,
+                  color: colors.text,
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                {presentation?.stand || 'Стенд Е-19'}
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Book cover */}
+        <div
+          style={{
+            position: 'absolute',
+            left: coverLayout.x * scale,
+            top: coverLayout.y * scale,
+            width: coverLayout.w * scale,
+            height: coverLayout.h * scale,
+            borderRadius: `${2 * scale}px ${8 * scale}px ${8 * scale}px ${2 * scale}px`,
+            boxShadow: SHADOWS.bookCoverLarge,
+            overflow: 'hidden',
+          }}
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={proxiedCoverUrl}
+            alt={title}
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            crossOrigin="anonymous"
+          />
+          {/* Spine gradient overlays */}
+          <div
+            style={{
+              position: 'absolute',
+              inset: 0,
+              background: BOOK_COVER_OVERLAY.multiply,
+              mixBlendMode: 'multiply',
+              pointerEvents: 'none',
+            }}
+          />
+          <div
+            style={{
+              position: 'absolute',
+              inset: 0,
+              background: BOOK_COVER_OVERLAY.lighten,
+              mixBlendMode: 'lighten',
+              pointerEvents: 'none',
+            }}
+          />
+        </div>
+
+        {/* Right-side info — depends on banner type */}
         {bannerType === 'book' ? (
-          // Book banner: Author + Title + Genre at top, cover left, QR right, annotation at bottom
-          <>
-            {/* Header: Author, Title, Genre - from Figma: x=80, y=156, w=936 */}
-            <div
-              style={{
-                position: 'absolute',
-                left: 80 * scale,
-                top: 156 * scale,
-                width: 700 * scale,
-              }}
-            >
-              {/* Author */}
-              <p
-                style={{
-                  ...TYPOGRAPHY.body,
-                  fontWeight: 700,
-                  fontSize: 40 * scale,
-                  lineHeight: `${48 * scale}px`,
-                  color: colors.text,
-                  marginBottom: 16 * scale,
-                }}
-              >
-                {author}
-              </p>
-
-              {/* Title */}
-              <p
-                style={{
-                  ...TYPOGRAPHY.title,
-                  fontSize: 48 * scale,
-                  lineHeight: `${56 * scale}px`,
-                  color: colors.text,
-                  marginBottom: 12 * scale,
-                }}
-              >
-                {title}
-              </p>
-
-              {/* Genre */}
-              {genre && (
-                <p
-                  style={{
-                    ...TYPOGRAPHY.body,
-                    fontStyle: 'italic',
-                    fontSize: 36 * scale,
-                    lineHeight: `${44 * scale}px`,
-                    color: colors.text,
-                    opacity: 0.4,
-                  }}
-                >
-                  {genre}
-                </p>
-              )}
-            </div>
-
-            {/* Book cover - shifted right to account for 3D perspective */}
-            <BookCover
-              book={book}
-              title={title}
-              author={author}
-              bookStyle={bookStyle}
-              scale={scale}
-              width={420}
-              height={590}
-              left={140}
-              top={420}
-              bgColor={colors.bg}
-            />
-
-            {/* QR Code card - right side, overlapping book */}
-            <div
-              style={{
-                position: 'absolute',
-                right: 80 * scale,
-                top: 900 * scale,
-                padding: 24 * scale,
-                backgroundColor: colors.cardBg,
-                borderRadius: 16 * scale,
-                boxShadow: SHADOWS.cardLarge,
-              }}
-            >
-              <p
-                style={{
-                  ...TYPOGRAPHY.body,
-                  fontSize: 22 * scale,
-                  lineHeight: `${28 * scale}px`,
-                  color: colors.text,
-                  marginBottom: 12 * scale,
-                }}
-              >
-                Сканируй и читай:
-              </p>
-              <QRCodeSVG
-                value={qrUrl}
-                size={180 * scale}
-                bgColor={colors.cardBg}
-                fgColor={colors.text}
-                level="M"
-              />
-            </div>
-
-            {/* Annotation at bottom */}
-            {annotation && (
-              <p
-                style={{
-                  position: 'absolute',
-                  left: 80 * scale,
-                  bottom: 80 * scale,
-                  width: 920 * scale,
-                  ...TYPOGRAPHY.body,
-                  fontSize: 36 * scale,
-                  lineHeight: `${48 * scale}px`,
-                  color: colors.text,
-                  display: '-webkit-box',
-                  WebkitLineClamp: 4,
-                  WebkitBoxOrient: 'vertical',
-                  overflow: 'hidden',
-                }}
-              >
-                {annotation}
-              </p>
-            )}
-          </>
-        ) : (
-          // Presentation banner: Title at top, cover below, time/location card, annotation at bottom
-          <>
-            {/* Title */}
+          /* Figma Book: QR card — x=712, y=1168, padding=32, radius=16 */
+          <div
+            style={{
+              position: 'absolute',
+              left: 712 * scale,
+              top: 1168 * scale,
+              padding: 32 * scale,
+              backgroundColor: colors.cardBg,
+              borderRadius: 16 * scale,
+              boxShadow: SHADOWS.cardLarge,
+              zIndex: 2,
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 16 * scale,
+              alignItems: 'flex-start',
+            }}
+          >
+            {/* "Сканируй и читай:" — PT Sans 28px, w=240 */}
             <p
               style={{
-                position: 'absolute',
-                left: 80 * scale,
-                top: 140 * scale,
-                width: 700 * scale,
-                ...TYPOGRAPHY.title,
-                fontSize: 64 * scale,
-                lineHeight: `${76 * scale}px`,
-                color: colors.text,
+                ...TYPOGRAPHY.body,
+                fontSize: 28 * scale,
+                lineHeight: `${32 * scale}px`,
+                color: '#000000',
+                width: 240 * scale,
               }}
             >
-              {presentation?.exhibitionName || 'Презентация моей книги на Non/fiction!'}
+              Сканируй и читай:
             </p>
-
-            {/* Book cover */}
-            <BookCover
-              book={book}
-              title={title}
-              author={author}
-              bookStyle={bookStyle}
-              scale={scale}
-              width={560}
-              height={790}
-              left={80}
-              top={380}
-              bgColor={colors.bg}
+            {/* QR code — 240x240 */}
+            <QRCodeSVG
+              value={qrUrl}
+              size={240 * scale}
+              bgColor={colors.cardBg}
+              fgColor="#000000"
+              level="M"
             />
-
-            {/* Time/Location/Stand card - bottom right */}
-            <div
-              style={{
-                position: 'absolute',
-                right: 80 * scale,
-                bottom: 320 * scale,
-                padding: 40 * scale,
-                backgroundColor: colors.cardBg,
-                borderRadius: 16 * scale,
-                boxShadow: SHADOWS.cardLarge,
-              }}
-            >
-              {/* Time */}
+          </div>
+        ) : (
+          /* Figma Presentation: Info card — x=544, y=1208, w=488, padding=32, radius=16 */
+          <div
+            style={{
+              position: 'absolute',
+              left: 544 * scale,
+              top: 1208 * scale,
+              width: 488 * scale,
+              padding: 32 * scale,
+              backgroundColor: colors.cardBg,
+              borderRadius: 16 * scale,
+              boxShadow: SHADOWS.cardLarge,
+              zIndex: 2,
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 32 * scale,
+              alignItems: 'flex-start',
+              justifyContent: 'center',
+            }}
+          >
+            {/* Time — PT Serif Bold 72px */}
+            {presentation?.time && (
               <p
                 style={{
                   ...TYPOGRAPHY.title,
-                  fontSize: 64 * scale,
-                  lineHeight: `${76 * scale}px`,
-                  color: colors.text,
-                  marginBottom: 24 * scale,
+                  fontWeight: 700,
+                  fontSize: 72 * scale,
+                  lineHeight: `${88 * scale}px`,
+                  color: '#000000',
+                  width: '100%',
                 }}
               >
-                {presentation?.time || '14:30–15:00'}
-              </p>
-
-              {/* Location */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12 * scale, marginBottom: 16 * scale }}>
-                <LocationIcon color={colors.text} size={36 * scale} />
-                <p
-                  style={{
-                    ...TYPOGRAPHY.body,
-                    fontSize: 28 * scale,
-                    lineHeight: `${36 * scale}px`,
-                    color: colors.text,
-                  }}
-                >
-                  {presentation?.location || 'Москва, Гостиный двор'}
-                </p>
-              </div>
-
-              {/* Stand */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12 * scale }}>
-                <StandIcon color={colors.text} size={36 * scale} />
-                <p
-                  style={{
-                    ...TYPOGRAPHY.body,
-                    fontSize: 28 * scale,
-                    lineHeight: `${36 * scale}px`,
-                    color: colors.text,
-                  }}
-                >
-                  {presentation?.stand || 'Стенд Е-19'}
-                </p>
-              </div>
-            </div>
-
-            {/* Annotation at bottom */}
-            {annotation && (
-              <p
-                style={{
-                  position: 'absolute',
-                  left: 80 * scale,
-                  bottom: 80 * scale,
-                  width: 920 * scale,
-                  ...TYPOGRAPHY.body,
-                  fontSize: 36 * scale,
-                  lineHeight: `${48 * scale}px`,
-                  color: colors.text,
-                  display: '-webkit-box',
-                  WebkitLineClamp: 3,
-                  WebkitBoxOrient: 'vertical',
-                  overflow: 'hidden',
-                }}
-              >
-                {annotation}
+                {presentation.time}
               </p>
             )}
-          </>
+
+            {/* Always use black icons on the white info card */}
+            {/* Location — icon 48x48 + PT Sans 34px, gap=16 */}
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 * scale, width: '100%' }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/assets/Место, черный.svg" alt="" style={{ width: 48 * scale, height: 48 * scale, flexShrink: 0 }} />
+              <p
+                style={{
+                  ...TYPOGRAPHY.body,
+                  fontSize: 34 * scale,
+                  lineHeight: `${48 * scale}px`,
+                  color: '#000000',
+                }}
+              >
+                {presentation?.location || 'Москва, Гостиный двор'}
+              </p>
+            </div>
+
+            {/* Stand — icon 48x48 + PT Sans 34px, gap=16 */}
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 * scale, width: '100%' }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/assets/Стенд, черный.svg" alt="" style={{ width: 48 * scale, height: 48 * scale, flexShrink: 0 }} />
+              <p
+                style={{
+                  ...TYPOGRAPHY.body,
+                  fontSize: 34 * scale,
+                  lineHeight: `${48 * scale}px`,
+                  color: '#000000',
+                }}
+              >
+                {presentation?.stand || 'Стенд Е-19'}
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Figma: Annotation — x=80, y=1608 (book) / y=1600 (presentation), w=920, PT Sans 44px */}
+        {annotation && (
+          <p
+            style={{
+              position: 'absolute',
+              left: 80 * scale,
+              top: (bannerType === 'book' ? 1608 : 1600) * scale,
+              width: 920 * scale,
+              ...TYPOGRAPHY.body,
+              fontSize: 44 * scale,
+              lineHeight: `${56 * scale}px`,
+              color: colors.text,
+            }}
+          >
+            {annotation}
+          </p>
         )}
       </div>
     );

@@ -69,8 +69,8 @@ const initialState = {
     stand: '',
   },
   selectedFormats: ['square'] as BannerFormat[],
-  colorScheme: 'yellow' as ColorScheme,
-  bookStyle: '3d' as BookStyle,
+  colorScheme: 'white' as ColorScheme,
+  bookStyle: 'flat' as BookStyle,
   qrUrl: '',
   currentStep: 1,
 };
@@ -84,15 +84,13 @@ export const useBannerStore = create<BannerStore>()(
 
       setBookData: (data) => set({
         bookData: data,
-        editedTitle: data?.title || '',
-        editedAuthor: data?.author || '',
-        editedAnnotation: data?.annotation || '',
+        editedAnnotation: data?.annotation?.slice(0, 160) || '',
         qrUrl: data?.freeFragmentUrl || data?.bookUrl || '',
       }),
 
       setEditedTitle: (title) => set({ editedTitle: title }),
       setEditedAuthor: (author) => set({ editedAuthor: author }),
-      setEditedAnnotation: (annotation) => set({ editedAnnotation: annotation.slice(0, 200) }),
+      setEditedAnnotation: (annotation) => set({ editedAnnotation: annotation.slice(0, 160) }),
 
       setBannerType: (type) => set({ bannerType: type }),
 
@@ -104,7 +102,7 @@ export const useBannerStore = create<BannerStore>()(
         const formats = state.selectedFormats.includes(format)
           ? state.selectedFormats.filter(f => f !== format)
           : [...state.selectedFormats, format];
-        return { selectedFormats: formats.length > 0 ? formats : [format] };
+        return { selectedFormats: formats };
       }),
 
       setColorScheme: (scheme) => set({ colorScheme: scheme }),

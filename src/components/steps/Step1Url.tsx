@@ -15,7 +15,7 @@ export function Step1Url() {
     setError('');
 
     if (!bookUrl.includes('ridero.ru/books/')) {
-      setError('Пожалуйста, введите корректную ссылку на книгу Ridero');
+      setError('Пожалуйста, введите корректную ссылку на книгу Rideró');
       return;
     }
 
@@ -36,7 +36,7 @@ export function Step1Url() {
       setBookData(bookData);
       nextStep();
     } catch (err) {
-      setError('Не удалось загрузить данные книги. Попробуйте ещё раз.');
+      setError('Не\u00A0удалось загрузить данные книги. Попробуйте еще раз.');
     }
 
     setLoading(false);
@@ -45,11 +45,11 @@ export function Step1Url() {
   return (
     <div className="max-w-xl mx-auto">
       <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-3">
-          Создайте баннер для своей книги
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3" style={{ fontFamily: "'PT Serif', serif" }}>
+          Создайте баннер для{'\u00A0'}своей книги
         </h1>
         <p className="text-gray-600 text-lg">
-          Вставьте ссылку на страницу книги в Ridero
+          Вставьте ссылку на{'\u00A0'}страницу книги в{'\u00A0'}Ridero
         </p>
       </div>
 
@@ -97,7 +97,7 @@ export function Step1Url() {
 
       <div className="mt-8 p-4 bg-gray-50 rounded-xl">
         <p className="text-sm text-gray-500 text-center">
-          Примеры ссылок для тестирования:
+          Примеры ссылок для{'\u00A0'}тестирования:
         </p>
         <div className="mt-2 space-y-1">
           <button

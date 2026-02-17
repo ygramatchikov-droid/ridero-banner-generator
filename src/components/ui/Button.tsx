@@ -11,26 +11,27 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className = '', variant = 'primary', size = 'md', children, disabled, ...props }, ref) => {
     const baseStyles = `
       inline-flex items-center justify-center
-      font-bold uppercase tracking-wide
+      font-bold uppercase
       transition-all duration-200
       focus:outline-none focus:ring-2 focus:ring-offset-2
-      disabled:opacity-50 disabled:cursor-not-allowed
+      disabled:cursor-not-allowed disabled:!bg-[#FFD8B3] disabled:!border-[#FFD8B3] disabled:!text-white
+      active:opacity-90
     `.replace(/\s+/g, ' ').trim();
 
-    // Ridero design system: 2px border-radius, orange primary, hover inversion
+    // Ridero design system: 1px border, 2px letter-spacing, orange primary, hover inversion
     const variants = {
       primary: `
-        bg-[#FF7E00] text-white border-2 border-[#FF7E00]
+        bg-[#FF7E00] text-white border border-[#FF7E00]
         hover:bg-white hover:text-[#FF7E00]
         focus:ring-[#FF7E00]
       `.replace(/\s+/g, ' ').trim(),
       secondary: `
-        bg-[#80B027] text-white border-2 border-[#80B027]
+        bg-[#80B027] text-white border border-[#80B027]
         hover:bg-white hover:text-[#80B027]
         focus:ring-[#80B027]
       `.replace(/\s+/g, ' ').trim(),
       outline: `
-        bg-white text-[#FF7E00] border-2 border-[#FF7E00]
+        bg-white text-[#FF7E00] border border-[#FF7E00]
         hover:bg-[#FF7E00] hover:text-white
         focus:ring-[#FF7E00]
       `.replace(/\s+/g, ' ').trim(),
@@ -50,6 +51,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         style={{
           fontFamily: "'PT Sans Caption', sans-serif",
           borderRadius: '2px',
+          letterSpacing: '2px',
         }}
         disabled={disabled}
         {...props}

@@ -16,7 +16,7 @@ export function Step3Format() {
   return (
     <div className="max-w-2xl mx-auto">
       <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-3">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3" style={{ fontFamily: "'PT Serif', serif" }}>
           Выберите форматы
         </h1>
         <p className="text-gray-600 text-lg">
@@ -51,7 +51,7 @@ export function Step3Format() {
                 <p className="text-gray-600 text-sm">{description}</p>
               </div>
               <div
-                className={`w-6 h-6 rounded-md border-2 flex items-center justify-center transition-colors ${
+                className={`w-6 h-6 rounded-md border flex items-center justify-center transition-colors ${
                   isSelected
                     ? 'bg-[#FF7E00] border-[#FF7E00] text-white'
                     : 'border-[#E8EBED]'
@@ -69,10 +69,10 @@ export function Step3Format() {
       </div>
 
       <div className="flex gap-4">
-        <Button variant="outline" onClick={prevStep} className="flex-1">
+        <Button variant="outline" size="lg" onClick={prevStep} className="flex-1">
           Назад
         </Button>
-        <Button onClick={nextStep} disabled={selectedFormats.length === 0} className="flex-1">
+        <Button size="lg" onClick={nextStep} disabled={selectedFormats.length === 0} className="flex-1">
           Далее
         </Button>
       </div>

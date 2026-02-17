@@ -141,20 +141,35 @@ function parseRideroPage(html: string, bookUrl: string): BookData | null {
     }
 
     let annotation = '';
-    const ogDescMatch = html.match(/<meta[^>]*property="og:description"[^>]*content="([^"]+)"/i);
-    if (ogDescMatch) {
-      annotation = ogDescMatch[1];
+
+    // 1. Try to extract from embedded JSON data (skuFromServer or product data)
+    //    The page embeds a JSON object with a clean "description" field
+    const jsonDescMatch = html.match(/"description"\s*:\s*"([^"]{30,})"/);
+    if (jsonDescMatch) {
+      annotation = jsonDescMatch[1];
+      // Unescape JSON string escapes
+      annotation = annotation
+        .replace(/\\n/g, ' ')
+        .replace(/\\"/g, '"')
+        .replace(/\\\\/g, '\\');
     }
 
-    let genre = 'Художественная литература';
-    const genreMatch = html.match(/catalog\/([^/"]+)/i);
-    if (genreMatch) {
-      genre = decodeURIComponent(genreMatch[1]).replace(/-/g, ' ');
+    // 2. Fallback: og:description, but strip metadata prefix
+    if (!annotation) {
+      const ogDescMatch = html.match(/<meta[^>]*property="og:description"[^>]*content="([^"]+)"/i);
+      if (ogDescMatch) {
+        let ogDesc = ogDescMatch[1];
+        // og:description on Ridero includes metadata prefix like:
+        // "Книга «Title». «Subtitle» - Author - печатная, электронная: epub, fb2, ... - actual annotation"
+        // Strip everything up to and including the format list
+        const formatPattern = /(?:печатная|электронная|аудио)[^-]*-\s*/i;
+        const formatMatch = ogDesc.match(formatPattern);
+        if (formatMatch && formatMatch.index !== undefined) {
+          ogDesc = ogDesc.slice(formatMatch.index + formatMatch[0].length);
+        }
+        annotation = ogDesc;
+      }
     }
-
-    const freeFragmentUrl = bookUrl.endsWith('/')
-      ? `${bookUrl}read/`
-      : `${bookUrl}/read/`;
 
     if (!coverUrl || !title) {
       return null;
@@ -165,9 +180,8 @@ function parseRideroPage(html: string, bookUrl: string): BookData | null {
       author: decodeHtmlEntities(author),
       coverUrl,
       annotation: decodeHtmlEntities(annotation),
-      genre: decodeHtmlEntities(genre),
       bookUrl,
-      freeFragmentUrl,
+      freeFragmentUrl: bookUrl,
     };
   } catch (error) {
     console.error('Error parsing HTML:', error);

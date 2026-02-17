@@ -8,18 +8,18 @@ export const SAMPLE_BOOKS: Record<string, BookData> = {
     author: 'Алексей Кулаков',
     coverUrl: 'https://store.ridero.ru/images/w350?bucket=yc:store-raw-data.ridero.store&key=ridero/sku/2020-10/5f8539eaa555ac5b6dc7c75a/rev.2022-08-19T04:16:04.609Z/cover-front.png&format=original',
     annotation: 'Фантастическая повесть про мир, в котором люди не умирают, но счастья у них от этого не прибавляется.',
-    genre: 'Фантастика',
+
     bookUrl: 'https://ridero.ru/books/skoraya/',
-    freeFragmentUrl: 'https://ridero.ru/books/skoraya/read/',
+    freeFragmentUrl: 'https://ridero.ru/books/skoraya/',
   },
   'menedzher_transformacii': {
     title: 'Менеджер трансформации',
     author: 'Марина Корсакова',
     coverUrl: 'https://covers.openlibrary.org/b/isbn/9785171139827-L.jpg', // Sample cover
     annotation: 'Практическое руководство по управлению изменениями в компании. Как стать лидером перемен и вести команду к успеху.',
-    genre: 'Бизнес',
+
     bookUrl: 'https://ridero.ru/books/menedzher_transformacii/',
-    freeFragmentUrl: 'https://ridero.ru/books/menedzher_transformacii/read/',
+    freeFragmentUrl: 'https://ridero.ru/books/menedzher_transformacii/',
   },
 };
 
@@ -55,8 +55,8 @@ export function getBookData(url: string): BookData | null {
     author: 'Автор книги',
     coverUrl: randomCover,
     annotation: 'Это увлекательная книга, которая откроет вам новые горизонты и подарит незабываемые эмоции от чтения.',
-    genre: 'Художественная литература',
+
     bookUrl: url,
-    freeFragmentUrl: `${url}read/`,
+    freeFragmentUrl: url,
   };
 }

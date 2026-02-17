@@ -41,7 +41,7 @@ export default function LoginPage() {
       <div className="w-full max-w-sm">
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
           <div className="text-center mb-8">
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">Ridero</h1>
+            <h1 className="text-2xl font-bold text-gray-900 mb-2">Rideró</h1>
             <p className="text-gray-500">Генератор баннеров</p>
           </div>
 

@@ -1,64 +1,25 @@
 'use client';
 
 import { useBannerStore } from '@/lib/store';
-import { ColorScheme, COLOR_SCHEMES, BookStyle } from '@/lib/types';
+import { ColorScheme, COLOR_SCHEMES } from '@/lib/types';
 import { Button } from '@/components/ui';
 
-const BOOK_STYLES: { value: BookStyle; label: string; description: string }[] = [
-  { value: '3d', label: '3D книга', description: 'Объёмная книга с корешком' },
-  { value: '3d-hardcover', label: '3D хардкавер', description: 'Книга с видимыми страницами' },
-  { value: 'flat', label: 'Плоская', description: 'Классическая плоская обложка' },
-];
-
 export function Step4Color() {
-  const { colorScheme, setColorScheme, bookStyle, setBookStyle, prevStep, nextStep } = useBannerStore();
+  const { colorScheme, setColorScheme, prevStep, nextStep } = useBannerStore();
 
   return (
     <div className="max-w-2xl mx-auto">
       <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-3">
-          Выберите цветовую схему
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3" style={{ fontFamily: "'PT Serif', serif" }}>
+          Настройте стиль
         </h1>
         <p className="text-gray-600 text-lg">
-          Подберите стиль под жанр вашей книги
+          Подберите цветовую схему под{'\u00A0'}жанр вашей книги
         </p>
       </div>
 
-      {/* Book style selector */}
-      <div className="mb-8">
-        <h2 className="text-lg font-semibold text-gray-800 mb-3">Стиль книги</h2>
-        <div className="grid grid-cols-3 gap-3">
-          {BOOK_STYLES.map((style) => {
-            const isSelected = bookStyle === style.value;
-            return (
-              <button
-                key={style.value}
-                onClick={() => setBookStyle(style.value)}
-                className={`p-4 rounded-xl border-2 text-left transition-all duration-200 ${
-                  isSelected
-                    ? 'border-[#FF7E00] bg-[#FFD8B3]/30'
-                    : 'border-gray-200 hover:border-gray-300'
-                }`}
-              >
-                <div className="flex items-center justify-between mb-1">
-                  <span className="font-medium text-gray-900">{style.label}</span>
-                  {isSelected && (
-                    <div className="w-5 h-5 bg-[#FF7E00] rounded-full flex items-center justify-center">
-                      <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                      </svg>
-                    </div>
-                  )}
-                </div>
-                <span className="text-sm text-gray-500">{style.description}</span>
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
       <h2 className="text-lg font-semibold text-gray-800 mb-3">Цветовая схема</h2>
-      <div className="grid grid-cols-3 md:grid-cols-4 gap-3 mb-8">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 mb-8">
         {(Object.keys(COLOR_SCHEMES) as ColorScheme[]).map((scheme) => {
           const { name, bg, wave, text } = COLOR_SCHEMES[scheme];
           const isSelected = colorScheme === scheme;
@@ -67,9 +28,9 @@ export function Step4Color() {
             <button
               key={scheme}
               onClick={() => setColorScheme(scheme)}
-              className={`relative p-3 rounded-2xl border-2 transition-all duration-200 ${
+              className={`relative p-3 rounded-2xl border transition-all duration-200 ${
                 isSelected
-                  ? 'border-[#FF7E00] shadow-lg ring-2 ring-[#FFD8B3]'
+                  ? 'border-[#FF7E00] shadow-lg'
                   : 'border-gray-100 hover:border-gray-200'
               }`}
             >
@@ -112,10 +73,10 @@ export function Step4Color() {
       </div>
 
       <div className="flex gap-4">
-        <Button variant="outline" onClick={prevStep} className="flex-1">
+        <Button variant="outline" size="lg" onClick={prevStep} className="flex-1">
           Назад
         </Button>
-        <Button onClick={nextStep} className="flex-1">
+        <Button size="lg" onClick={nextStep} className="flex-1">
           Далее
         </Button>
       </div>

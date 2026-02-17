@@ -3,7 +3,6 @@ export interface BookData {
   author: string;
   coverUrl: string;
   annotation: string;
-  genre: string;
   bookUrl: string;
   freeFragmentUrl: string;
 }
@@ -19,18 +18,17 @@ export type BannerType = 'book' | 'presentation';
 
 export type BannerFormat = 'square' | 'vertical';
 
-export type ColorScheme = 'yellow' | 'orange' | 'green' | 'lightblue' | 'blue' | 'gray' | 'white';
+export type ColorScheme = 'white' | 'dark' | 'lightblue' | 'yellow' | 'mint' | 'pink';
 
-export type BookStyle = 'flat' | '3d' | '3d-hardcover';
+export type BookStyle = 'flat' | '3d-hardcover';
 
 export const FORMAT_DIMENSIONS: Record<BannerFormat, { width: number; height: number; label: string; description: string }> = {
   square: { width: 1080, height: 1080, label: 'Квадратный', description: 'Лента VK, Telegram, TenChat' },
   vertical: { width: 1080, height: 1920, label: 'Вертикальный', description: 'Истории VK, TenChat' },
 };
 
-// Color schemes from Figma design
-// All schemes use black text (#000000) and white Ridero logo
-// Decorative wave vectors match the background color with lighter opacity
+// Color schemes from Nonfik Spring 2026 design
+// Most schemes use black text and dark logo, except dark theme uses white text and white logo
 export const COLOR_SCHEMES: Record<ColorScheme, {
   name: string;
   bg: string;
@@ -38,68 +36,59 @@ export const COLOR_SCHEMES: Record<ColorScheme, {
   text: string;
   textSecondary: string;
   cardBg: string;    // QR/info card background (always white)
-  logoVariant: 'dark' | 'white';  // Ridero logo variant
+  logoVariant: 'dark' | 'white';  // Rideró logo variant
 }> = {
-  yellow: {
-    name: 'Жёлтый',
-    bg: '#FFD84D',
-    wave: '#FFE57A',
-    text: '#000000',
-    textSecondary: 'rgba(0,0,0,0.4)',
-    cardBg: '#FFFFFF',
-    logoVariant: 'dark',
-  },
-  orange: {
-    name: 'Оранжевый',
-    bg: '#FF7E00',
-    wave: '#FF9933',
-    text: '#000000',
-    textSecondary: 'rgba(0,0,0,0.4)',
-    cardBg: '#FFFFFF',
-    logoVariant: 'white',
-  },
-  green: {
-    name: 'Зелёный',
-    bg: '#B8E4C8',
-    wave: '#D0EFDC',
-    text: '#000000',
-    textSecondary: 'rgba(0,0,0,0.4)',
-    cardBg: '#FFFFFF',
-    logoVariant: 'dark',
-  },
-  lightblue: {
-    name: 'Голубой',
-    bg: '#B8D4E8',
-    wave: '#D0E4F0',
-    text: '#000000',
-    textSecondary: 'rgba(0,0,0,0.4)',
-    cardBg: '#FFFFFF',
-    logoVariant: 'dark',
-  },
-  blue: {
-    name: 'Синий',
-    bg: '#7BA3D0',
-    wave: '#9BBDE0',
-    text: '#000000',
-    textSecondary: 'rgba(0,0,0,0.4)',
-    cardBg: '#FFFFFF',
-    logoVariant: 'white',
-  },
-  gray: {
-    name: 'Серый',
-    bg: '#E5E5E5',
-    wave: '#F0F0F0',
-    text: '#000000',
-    textSecondary: 'rgba(0,0,0,0.4)',
-    cardBg: '#FFFFFF',
-    logoVariant: 'dark',
-  },
   white: {
     name: 'Белый',
     bg: '#FFFFFF',
-    wave: '#F5F5F5',
+    wave: '#FBEAD7',
     text: '#000000',
-    textSecondary: 'rgba(0,0,0,0.4)',
+    textSecondary: 'rgba(0,0,0,0.6)',
+    cardBg: '#FFFFFF',
+    logoVariant: 'dark',
+  },
+  dark: {
+    name: 'Темный',
+    bg: '#212936',
+    wave: 'rgba(255,255,255,0.1)',
+    text: '#FFFFFF',
+    textSecondary: 'rgba(255,255,255,0.6)',
+    cardBg: '#FFFFFF',
+    logoVariant: 'white',
+  },
+  lightblue: {
+    name: 'Голубой',
+    bg: '#C5DFFF',
+    wave: '#B0D4FF',
+    text: '#000000',
+    textSecondary: 'rgba(0,0,0,0.6)',
+    cardBg: '#FFFFFF',
+    logoVariant: 'dark',
+  },
+  yellow: {
+    name: 'Желтый',
+    bg: '#FCF4CB',
+    wave: '#F7E0BD',
+    text: '#000000',
+    textSecondary: 'rgba(0,0,0,0.6)',
+    cardBg: '#FFFFFF',
+    logoVariant: 'dark',
+  },
+  mint: {
+    name: 'Мятный',
+    bg: '#C8F2D8',
+    wave: '#B0E9C6',
+    text: '#000000',
+    textSecondary: 'rgba(0,0,0,0.6)',
+    cardBg: '#FFFFFF',
+    logoVariant: 'dark',
+  },
+  pink: {
+    name: 'Розовый',
+    bg: '#FFD6EB',
+    wave: '#FFC0E0',
+    text: '#000000',
+    textSecondary: 'rgba(0,0,0,0.6)',
     cardBg: '#FFFFFF',
     logoVariant: 'dark',
   },
@@ -122,11 +111,10 @@ export const TYPOGRAPHY = {
     fontFamily: "'PT Sans', 'Helvetica Neue', sans-serif",
     fontWeight: 400,
   },
-  // PT Sans Italic - for genre
-  italic: {
+  // PT Sans Bold — for exhibition name, headings on banners
+  bold: {
     fontFamily: "'PT Sans', 'Helvetica Neue', sans-serif",
-    fontWeight: 400,
-    fontStyle: 'italic' as const,
+    fontWeight: 700,
   },
 };
 

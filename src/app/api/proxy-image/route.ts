@@ -7,7 +7,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'Missing url parameter' }, { status: 400 });
   }
 
-  // Only proxy images from known Ridero domains
+  // Validate URL
   let parsed: URL;
   try {
     parsed = new URL(imageUrl);
@@ -15,9 +15,8 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'Invalid URL' }, { status: 400 });
   }
 
-  const allowedHosts = ['store.ridero.ru', 'ridero.ru', 'www.ridero.ru'];
-  if (!allowedHosts.includes(parsed.hostname)) {
-    return NextResponse.json({ error: 'Domain not allowed' }, { status: 403 });
+  if (!['http:', 'https:'].includes(parsed.protocol)) {
+    return NextResponse.json({ error: 'Invalid protocol' }, { status: 400 });
   }
 
   try {
@@ -38,12 +37,19 @@ export async function GET(request: NextRequest) {
     }
 
     const contentType = response.headers.get('content-type') || 'image/png';
+
+    // Only allow image content types
+    if (!contentType.startsWith('image/')) {
+      return NextResponse.json({ error: 'Not an image' }, { status: 400 });
+    }
+
     const buffer = await response.arrayBuffer();
 
     return new NextResponse(buffer, {
       headers: {
         'Content-Type': contentType,
         'Cache-Control': 'public, max-age=86400',
+        'Access-Control-Allow-Origin': '*',
       },
     });
   } catch (error) {
