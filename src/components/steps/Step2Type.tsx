@@ -64,7 +64,7 @@ export function Step2Type() {
 
       {/* Book data fields (exhibition name, location & stand) */}
       {bannerType === 'book' && (
-        <div className="bg-gray-50 rounded-2xl p-4 sm:p-6 mb-8 space-y-4">
+        <div className="bg-gray-50 rounded-2xl py-4 sm:py-6 mb-8 space-y-4">
           <h3 className="font-bold text-gray-900 mb-4 uppercase" style={{ fontFamily: "'PT Sans Caption', sans-serif", fontSize: '18px', lineHeight: '24px', letterSpacing: '2px' }}>Заполните данные</h3>
 
           <Input
@@ -92,7 +92,7 @@ export function Step2Type() {
 
       {/* Presentation data fields */}
       {bannerType === 'presentation' && (
-        <div className="bg-gray-50 rounded-2xl p-4 sm:p-6 mb-8 space-y-4">
+        <div className="bg-gray-50 rounded-2xl py-4 sm:py-6 mb-8 space-y-4">
           <h3 className="font-bold text-gray-900 mb-4 uppercase" style={{ fontFamily: "'PT Sans Caption', sans-serif", fontSize: '18px', lineHeight: '24px', letterSpacing: '2px' }}>Заполните данные</h3>
 
           <Input

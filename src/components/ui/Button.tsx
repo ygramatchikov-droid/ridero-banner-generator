@@ -18,7 +18,6 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       active:opacity-90
     `.replace(/\s+/g, ' ').trim();
 
-    // Ridero design system: 1px border, 2px letter-spacing, orange primary, hover inversion
     const variants = {
       primary: `
         bg-[#FF7E00] text-white border border-[#FF7E00]
@@ -37,17 +36,21 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       `.replace(/\s+/g, ' ').trim(),
     };
 
-    // All buttons 48px on mobile; on desktop: sm=32, md=40, lg=48
+    // btn-48 (lg): h-48 everywhere; desktop: Caption bold uppercase tracking
+    // btn-40 (md): h-40 desktop, h-48 mobile; PT Sans Regular everywhere
     const sizes = {
-      sm: 'h-12 sm:h-8 px-4 rounded-sm',
-      md: 'h-12 sm:h-10 px-6 rounded-sm',
-      lg: 'h-12 px-8 rounded-sm',
+      sm: 'h-12 sm:h-8 px-4',
+      md: 'h-12 sm:h-10 px-6',
+      lg: 'h-12 px-8 sm:font-bold sm:uppercase sm:tracking-[2px]',
     };
+
+    // lg buttons get PT Sans Caption on desktop via CSS class
+    const fontClass = size === 'lg' ? 'btn-lg-font' : '';
 
     return (
       <button
         ref={ref}
-        className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`}
+        className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${fontClass} ${className}`}
         style={{
           fontFamily: "'PT Sans', 'Helvetica Neue', sans-serif",
           fontSize: '18px',

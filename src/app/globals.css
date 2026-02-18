@@ -122,3 +122,10 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
+
+/* btn-48 (lg) buttons: PT Sans Caption on desktop, PT Sans on mobile */
+@media (min-width: 640px) {
+  .btn-lg-font {
+    font-family: 'PT Sans Caption', sans-serif !important;
+  }
+}
