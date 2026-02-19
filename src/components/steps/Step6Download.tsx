@@ -175,10 +175,10 @@ export function Step6Download() {
       {/* Hidden render area for generation */}
       <div className="absolute left-[-9999px] top-0">
         {selectedFormats.includes('square') && (
-          <SquareBanner ref={squareRef} {...bannerProps} scale={1} />
+          <SquareBanner ref={squareRef} {...bannerProps} />
         )}
         {selectedFormats.includes('vertical') && (
-          <VerticalBanner ref={verticalRef} {...bannerProps} scale={1} />
+          <VerticalBanner ref={verticalRef} {...bannerProps} />
         )}
       </div>
 

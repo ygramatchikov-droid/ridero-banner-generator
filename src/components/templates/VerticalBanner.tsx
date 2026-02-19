@@ -22,7 +22,6 @@ interface VerticalBannerProps {
   author: string;
   annotation: string;
   qrUrl?: string;
-  scale?: number;
 }
 
 const BACKGROUND_MAP: Record<ColorScheme, string> = {
@@ -35,14 +34,12 @@ const BACKGROUND_MAP: Record<ColorScheme, string> = {
 };
 
 export const VerticalBanner = forwardRef<HTMLDivElement, VerticalBannerProps>(
-  ({ book, colorScheme, bannerType, presentation, title, annotation, qrUrl: customQrUrl, scale = 0.4 }, ref) => {
+  ({ book, colorScheme, bannerType, presentation, title, annotation, qrUrl: customQrUrl }, ref) => {
     const colors = COLOR_SCHEMES[colorScheme];
     const qrUrl = customQrUrl || book.freeFragmentUrl || book.bookUrl;
     const proxiedCoverUrl = book.coverUrl.startsWith('http')
       ? `/api/proxy-image?url=${encodeURIComponent(book.coverUrl)}`
       : book.coverUrl;
-    const width = 1080 * scale;
-    const height = 1920 * scale;
     const backgroundSvg = BACKGROUND_MAP[colorScheme];
     const logoSvg = colors.logoVariant === 'white' ? '/assets/Лого белый.svg' : '/assets/Лого черный.svg';
     const dateIcon = colors.logoVariant === 'white' ? '/assets/Дата, белый.svg' : '/assets/Дата, черный.svg';
@@ -63,8 +60,8 @@ export const VerticalBanner = forwardRef<HTMLDivElement, VerticalBannerProps>(
       <div
         ref={ref}
         style={{
-          width,
-          height,
+          width: 1080,
+          height: 1920,
           position: 'relative',
           overflow: 'hidden',
           backgroundImage: `url('${backgroundSvg}')`,
@@ -76,10 +73,10 @@ export const VerticalBanner = forwardRef<HTMLDivElement, VerticalBannerProps>(
         <div
           style={{
             position: 'absolute',
-            right: 64 * scale,
-            top: 64 * scale,
-            width: 130 * scale,
-            height: 40 * scale,
+            right: 64,
+            top: 64,
+            width: 130,
+            height: 40,
           }}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -90,17 +87,17 @@ export const VerticalBanner = forwardRef<HTMLDivElement, VerticalBannerProps>(
           />
         </div>
 
-        {/* Figma: Banner title — x=80, bottom-aligned to y=304, PT Serif Bold 60px, w=664 */}
+        {/* Figma: Banner title — x=80, top=160, PT Serif Bold 60px, w=664 */}
         <p
           style={{
             position: 'absolute',
-            left: 80 * scale,
-            bottom: (1920 - 304) * scale,
-            width: 664 * scale,
+            left: 80,
+            top: 160,
+            width: 664,
             ...TYPOGRAPHY.title,
             fontWeight: 700,
-            fontSize: 60 * scale,
-            lineHeight: `${72 * scale}px`,
+            fontSize: 60,
+            lineHeight: '72px',
             color: colors.text,
           }}
         >
@@ -112,22 +109,22 @@ export const VerticalBanner = forwardRef<HTMLDivElement, VerticalBannerProps>(
           <div
             style={{
               position: 'absolute',
-              left: 80 * scale,
-              top: 336 * scale,
+              left: 80,
+              top: 336,
               display: 'flex',
-              alignItems: 'center',
-              gap: 32 * scale,
+              alignItems: 'flex-start',
+              gap: 32,
             }}
           >
             {/* Date: icon 48x48 + text, inner gap=16 */}
-            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 * scale }}>
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={dateIcon} alt="" style={{ width: 48 * scale, height: 48 * scale, flexShrink: 0 }} />
+              <img src={dateIcon} alt="" style={{ width: 48, height: 48, flexShrink: 0 }} />
               <p
                 style={{
                   ...TYPOGRAPHY.bold,
-                  fontSize: 34 * scale,
-                  lineHeight: `${48 * scale}px`,
+                  fontSize: 34,
+                  lineHeight: '48px',
                   color: colors.text,
                   whiteSpace: 'nowrap',
                 }}
@@ -137,14 +134,14 @@ export const VerticalBanner = forwardRef<HTMLDivElement, VerticalBannerProps>(
             </div>
 
             {/* Location: icon 48x48 + text, inner gap=16 */}
-            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 * scale }}>
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={locationIcon} alt="" style={{ width: 48 * scale, height: 48 * scale, flexShrink: 0 }} />
+              <img src={locationIcon} alt="" style={{ width: 48, height: 48, flexShrink: 0 }} />
               <p
                 style={{
                   ...TYPOGRAPHY.body,
-                  fontSize: 34 * scale,
-                  lineHeight: `${48 * scale}px`,
+                  fontSize: 34,
+                  lineHeight: '48px',
                   color: colors.text,
                   whiteSpace: 'nowrap',
                 }}
@@ -154,14 +151,14 @@ export const VerticalBanner = forwardRef<HTMLDivElement, VerticalBannerProps>(
             </div>
 
             {/* Stand: icon 48x48 + text, inner gap=16 */}
-            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 * scale }}>
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={standIcon} alt="" style={{ width: 48 * scale, height: 48 * scale, flexShrink: 0 }} />
+              <img src={standIcon} alt="" style={{ width: 48, height: 48, flexShrink: 0 }} />
               <p
                 style={{
                   ...TYPOGRAPHY.body,
-                  fontSize: 34 * scale,
-                  lineHeight: `${48 * scale}px`,
+                  fontSize: 34,
+                  lineHeight: '48px',
                   color: colors.text,
                   whiteSpace: 'nowrap',
                 }}
@@ -176,11 +173,11 @@ export const VerticalBanner = forwardRef<HTMLDivElement, VerticalBannerProps>(
         <div
           style={{
             position: 'absolute',
-            left: coverLayout.x * scale,
-            top: coverLayout.y * scale,
-            width: coverLayout.w * scale,
-            height: coverLayout.h * scale,
-            borderRadius: `${2 * scale}px ${8 * scale}px ${8 * scale}px ${2 * scale}px`,
+            left: coverLayout.x,
+            top: coverLayout.y,
+            width: coverLayout.w,
+            height: coverLayout.h,
+            borderRadius: '2px 8px 8px 2px',
             boxShadow: SHADOWS.bookCoverLarge,
             overflow: 'hidden',
           }}
@@ -219,16 +216,16 @@ export const VerticalBanner = forwardRef<HTMLDivElement, VerticalBannerProps>(
           <div
             style={{
               position: 'absolute',
-              left: 712 * scale,
-              top: 1168 * scale,
-              padding: 32 * scale,
+              left: 712,
+              top: 1168,
+              padding: 32,
               backgroundColor: colors.cardBg,
-              borderRadius: 16 * scale,
+              borderRadius: 16,
               boxShadow: SHADOWS.cardLarge,
               zIndex: 2,
               display: 'flex',
               flexDirection: 'column',
-              gap: 16 * scale,
+              gap: 16,
               alignItems: 'flex-start',
             }}
           >
@@ -236,10 +233,10 @@ export const VerticalBanner = forwardRef<HTMLDivElement, VerticalBannerProps>(
             <p
               style={{
                 ...TYPOGRAPHY.body,
-                fontSize: 28 * scale,
-                lineHeight: `${32 * scale}px`,
+                fontSize: 28,
+                lineHeight: '32px',
                 color: '#000000',
-                width: 240 * scale,
+                width: 240,
               }}
             >
               Сканируй и читай:
@@ -247,7 +244,7 @@ export const VerticalBanner = forwardRef<HTMLDivElement, VerticalBannerProps>(
             {/* QR code — 240x240 */}
             <QRCodeSVG
               value={qrUrl}
-              size={240 * scale}
+              size={240}
               bgColor={colors.cardBg}
               fgColor="#000000"
               level="M"
@@ -258,17 +255,17 @@ export const VerticalBanner = forwardRef<HTMLDivElement, VerticalBannerProps>(
           <div
             style={{
               position: 'absolute',
-              left: 544 * scale,
-              top: 1160 * scale,
-              width: 488 * scale,
-              padding: 32 * scale,
+              left: 544,
+              top: 1160,
+              width: 488,
+              padding: 32,
               backgroundColor: colors.cardBg,
-              borderRadius: 16 * scale,
+              borderRadius: 16,
               boxShadow: SHADOWS.cardLarge,
               zIndex: 2,
               display: 'flex',
               flexDirection: 'column',
-              gap: 32 * scale,
+              gap: 32,
               alignItems: 'flex-start',
               justifyContent: 'center',
             }}
@@ -279,8 +276,8 @@ export const VerticalBanner = forwardRef<HTMLDivElement, VerticalBannerProps>(
                 style={{
                   ...TYPOGRAPHY.title,
                   fontWeight: 700,
-                  fontSize: 72 * scale,
-                  lineHeight: `${88 * scale}px`,
+                  fontSize: 72,
+                  lineHeight: '88px',
                   color: '#000000',
                   width: '100%',
                 }}
@@ -291,14 +288,14 @@ export const VerticalBanner = forwardRef<HTMLDivElement, VerticalBannerProps>(
 
             {/* Always use black icons on the white info card */}
             {/* Date — icon 48x48 + PT Sans Bold 34px, gap=16 */}
-            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 * scale, width: '100%' }}>
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16, width: '100%' }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/assets/Дата, черный.svg" alt="" style={{ width: 48 * scale, height: 48 * scale, flexShrink: 0 }} />
+              <img src="/assets/Дата, черный.svg" alt="" style={{ width: 48, height: 48, flexShrink: 0 }} />
               <p
                 style={{
                   ...TYPOGRAPHY.bold,
-                  fontSize: 34 * scale,
-                  lineHeight: `${48 * scale}px`,
+                  fontSize: 34,
+                  lineHeight: '48px',
                   color: '#000000',
                 }}
               >
@@ -307,14 +304,14 @@ export const VerticalBanner = forwardRef<HTMLDivElement, VerticalBannerProps>(
             </div>
 
             {/* Location — icon 48x48 + PT Sans 34px, gap=16 */}
-            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 * scale, width: '100%' }}>
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16, width: '100%' }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/assets/Место, черный.svg" alt="" style={{ width: 48 * scale, height: 48 * scale, flexShrink: 0 }} />
+              <img src="/assets/Место, черный.svg" alt="" style={{ width: 48, height: 48, flexShrink: 0 }} />
               <p
                 style={{
                   ...TYPOGRAPHY.body,
-                  fontSize: 34 * scale,
-                  lineHeight: `${48 * scale}px`,
+                  fontSize: 34,
+                  lineHeight: '48px',
                   color: '#000000',
                 }}
               >
@@ -323,14 +320,14 @@ export const VerticalBanner = forwardRef<HTMLDivElement, VerticalBannerProps>(
             </div>
 
             {/* Stand — icon 48x48 + PT Sans 34px, gap=16 */}
-            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 * scale, width: '100%' }}>
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16, width: '100%' }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/assets/Стенд, черный.svg" alt="" style={{ width: 48 * scale, height: 48 * scale, flexShrink: 0 }} />
+              <img src="/assets/Стенд, черный.svg" alt="" style={{ width: 48, height: 48, flexShrink: 0 }} />
               <p
                 style={{
                   ...TYPOGRAPHY.body,
-                  fontSize: 34 * scale,
-                  lineHeight: `${48 * scale}px`,
+                  fontSize: 34,
+                  lineHeight: '48px',
                   color: '#000000',
                 }}
               >
@@ -345,12 +342,12 @@ export const VerticalBanner = forwardRef<HTMLDivElement, VerticalBannerProps>(
           <p
             style={{
               position: 'absolute',
-              left: 80 * scale,
-              top: (bannerType === 'book' ? 1608 : 1600) * scale,
-              width: 920 * scale,
+              left: 80,
+              top: bannerType === 'book' ? 1608 : 1600,
+              width: 920,
               ...TYPOGRAPHY.body,
-              fontSize: 44 * scale,
-              lineHeight: `${56 * scale}px`,
+              fontSize: 44,
+              lineHeight: '56px',
               color: colors.text,
             }}
           >

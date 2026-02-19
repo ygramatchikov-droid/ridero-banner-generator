@@ -22,7 +22,6 @@ interface SquareBannerProps {
   author: string;
   annotation: string;
   qrUrl?: string;
-  scale?: number;
 }
 
 const BACKGROUND_MAP: Record<ColorScheme, string> = {
@@ -35,13 +34,12 @@ const BACKGROUND_MAP: Record<ColorScheme, string> = {
 };
 
 export const SquareBanner = forwardRef<HTMLDivElement, SquareBannerProps>(
-  ({ book, colorScheme, bannerType, presentation, title, annotation, qrUrl: customQrUrl, scale = 0.4 }, ref) => {
+  ({ book, colorScheme, bannerType, presentation, title, annotation, qrUrl: customQrUrl }, ref) => {
     const colors = COLOR_SCHEMES[colorScheme];
     const qrUrl = customQrUrl || book.freeFragmentUrl || book.bookUrl;
     const proxiedCoverUrl = book.coverUrl.startsWith('http')
       ? `/api/proxy-image?url=${encodeURIComponent(book.coverUrl)}`
       : book.coverUrl;
-    const size = 1080 * scale;
     const backgroundSvg = BACKGROUND_MAP[colorScheme];
     const logoSvg = colors.logoVariant === 'white' ? '/assets/Лого белый.svg' : '/assets/Лого черный.svg';
     const dateIcon = colors.logoVariant === 'white' ? '/assets/Дата, белый.svg' : '/assets/Дата, черный.svg';
@@ -57,8 +55,8 @@ export const SquareBanner = forwardRef<HTMLDivElement, SquareBannerProps>(
       <div
         ref={ref}
         style={{
-          width: size,
-          height: size,
+          width: 1080,
+          height: 1080,
           position: 'relative',
           overflow: 'hidden',
           backgroundImage: `url('${backgroundSvg}')`,
@@ -70,10 +68,10 @@ export const SquareBanner = forwardRef<HTMLDivElement, SquareBannerProps>(
         <div
           style={{
             position: 'absolute',
-            right: 64 * scale,
-            top: 64 * scale,
-            width: 130 * scale,
-            height: 40 * scale,
+            right: 64,
+            top: 64,
+            width: 130,
+            height: 40,
           }}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -88,11 +86,11 @@ export const SquareBanner = forwardRef<HTMLDivElement, SquareBannerProps>(
         <div
           style={{
             position: 'absolute',
-            left: 64 * scale,
-            top: 80 * scale,
-            width: 480 * scale,
-            height: 680 * scale,
-            borderRadius: `${2 * scale}px ${8 * scale}px ${8 * scale}px ${2 * scale}px`,
+            left: 64,
+            top: 80,
+            width: 480,
+            height: 680,
+            borderRadius: '2px 8px 8px 2px',
             boxShadow: SHADOWS.bookCover,
             overflow: 'hidden',
           }}
@@ -132,33 +130,33 @@ export const SquareBanner = forwardRef<HTMLDivElement, SquareBannerProps>(
             <div
               style={{
                 position: 'absolute',
-                left: 600 * scale,
-                top: 168 * scale,
-                width: 416 * scale,
+                left: 600,
+                top: 168,
+                width: 416,
               }}
             >
               {/* Exhibition title — PT Sans Bold 34px */}
               <p
                 style={{
                   ...TYPOGRAPHY.bold,
-                  fontSize: 34 * scale,
-                  lineHeight: `${48 * scale}px`,
+                  fontSize: 34,
+                  lineHeight: '48px',
                   color: colors.text,
-                  marginBottom: 32 * scale,
+                  marginBottom: 32,
                 }}
               >
                 {bannerTitle}
               </p>
 
               {/* Date — icon 48x48 + PT Sans Bold 34px, gap=16 */}
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 * scale, marginBottom: 32 * scale }}>
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16, marginBottom: 32 }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={dateIcon} alt="" style={{ width: 48 * scale, height: 48 * scale, flexShrink: 0 }} />
+                <img src={dateIcon} alt="" style={{ width: 48, height: 48, flexShrink: 0 }} />
                 <p
                   style={{
                     ...TYPOGRAPHY.bold,
-                    fontSize: 34 * scale,
-                    lineHeight: `${48 * scale}px`,
+                    fontSize: 34,
+                    lineHeight: '48px',
                     color: colors.text,
                   }}
                 >
@@ -167,14 +165,14 @@ export const SquareBanner = forwardRef<HTMLDivElement, SquareBannerProps>(
               </div>
 
               {/* Location — icon 48x48 + PT Sans 34px, gap=16 */}
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 * scale, marginBottom: 32 * scale }}>
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16, marginBottom: 32 }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={locationIcon} alt="" style={{ width: 48 * scale, height: 48 * scale, flexShrink: 0 }} />
+                <img src={locationIcon} alt="" style={{ width: 48, height: 48, flexShrink: 0 }} />
                 <p
                   style={{
                     ...TYPOGRAPHY.body,
-                    fontSize: 34 * scale,
-                    lineHeight: `${48 * scale}px`,
+                    fontSize: 34,
+                    lineHeight: '48px',
                     color: colors.text,
                   }}
                 >
@@ -183,14 +181,14 @@ export const SquareBanner = forwardRef<HTMLDivElement, SquareBannerProps>(
               </div>
 
               {/* Stand — icon 48x48 + PT Sans 34px, gap=16 */}
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 * scale }}>
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={standIcon} alt="" style={{ width: 48 * scale, height: 48 * scale, flexShrink: 0 }} />
+                <img src={standIcon} alt="" style={{ width: 48, height: 48, flexShrink: 0 }} />
                 <p
                   style={{
                     ...TYPOGRAPHY.body,
-                    fontSize: 34 * scale,
-                    lineHeight: `${48 * scale}px`,
+                    fontSize: 34,
+                    lineHeight: '48px',
                     color: colors.text,
                   }}
                 >
@@ -203,32 +201,32 @@ export const SquareBanner = forwardRef<HTMLDivElement, SquareBannerProps>(
             <div
               style={{
                 position: 'absolute',
-                left: 512 * scale,
-                top: 525 * scale,
-                width: 264 * scale,
-                height: 288 * scale,
+                left: 512,
+                top: 525,
+                width: 264,
+                height: 288,
                 backgroundColor: colors.cardBg,
-                borderRadius: 8 * scale,
+                borderRadius: 8,
                 boxShadow: SHADOWS.card,
                 zIndex: 2,
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'flex-start',
-                paddingTop: 16 * scale,
-                paddingLeft: 32 * scale,
-                paddingRight: 32 * scale,
-                paddingBottom: 32 * scale,
+                paddingTop: 16,
+                paddingLeft: 32,
+                paddingRight: 32,
+                paddingBottom: 32,
               }}
             >
               <p
                 style={{
                   ...TYPOGRAPHY.body,
-                  fontSize: 20 * scale,
-                  lineHeight: `${24 * scale}px`,
+                  fontSize: 20,
+                  lineHeight: '24px',
                   color: '#000000',
-                  marginBottom: 16 * scale,
-                  width: 200 * scale,
+                  marginBottom: 16,
+                  width: 200,
                   textAlign: 'left',
                 }}
               >
@@ -236,7 +234,7 @@ export const SquareBanner = forwardRef<HTMLDivElement, SquareBannerProps>(
               </p>
               <QRCodeSVG
                 value={qrUrl}
-                size={200 * scale}
+                size={200}
                 bgColor={colors.cardBg}
                 fgColor="#000000"
                 level="M"
@@ -249,29 +247,29 @@ export const SquareBanner = forwardRef<HTMLDivElement, SquareBannerProps>(
             <p
               style={{
                 position: 'absolute',
-                left: 600 * scale,
-                top: 216 * scale,
-                width: 415 * scale,
+                left: 600,
+                top: 216,
+                width: 415,
                 ...TYPOGRAPHY.bold,
-                fontSize: 34 * scale,
-                lineHeight: `${48 * scale}px`,
+                fontSize: 34,
+                lineHeight: '48px',
                 color: colors.text,
               }}
             >
               {bannerTitle}
             </p>
 
-            {/* Figma Presentation: Time — x=600, bottom-aligned to y=448, PT Serif Bold 60px */}
+            {/* Figma Presentation: Time — x=600, y=376, PT Serif Bold 60px */}
             {presentation?.time && (
               <p
                 style={{
                   position: 'absolute',
-                  left: 600 * scale,
-                  top: 376 * scale,
+                  left: 600,
+                  top: 376,
                   ...TYPOGRAPHY.title,
                   fontWeight: 700,
-                  fontSize: 60 * scale,
-                  lineHeight: `${72 * scale}px`,
+                  fontSize: 60,
+                  lineHeight: '72px',
                   color: colors.text,
                   whiteSpace: 'nowrap',
                 }}
@@ -284,23 +282,23 @@ export const SquareBanner = forwardRef<HTMLDivElement, SquareBannerProps>(
             <div
               style={{
                 position: 'absolute',
-                left: 600 * scale,
-                top: 480 * scale,
-                width: 416 * scale,
+                left: 600,
+                top: 480,
+                width: 416,
                 display: 'flex',
                 flexDirection: 'column',
-                gap: 32 * scale,
+                gap: 32,
               }}
             >
               {/* Date — icon 48x48 + PT Sans Bold 34px, gap=16 */}
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 * scale }}>
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={dateIcon} alt="" style={{ width: 48 * scale, height: 48 * scale, flexShrink: 0 }} />
+                <img src={dateIcon} alt="" style={{ width: 48, height: 48, flexShrink: 0 }} />
                 <p
                   style={{
                     ...TYPOGRAPHY.bold,
-                    fontSize: 34 * scale,
-                    lineHeight: `${48 * scale}px`,
+                    fontSize: 34,
+                    lineHeight: '48px',
                     color: colors.text,
                   }}
                 >
@@ -308,14 +306,14 @@ export const SquareBanner = forwardRef<HTMLDivElement, SquareBannerProps>(
                 </p>
               </div>
 
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 * scale }}>
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={locationIcon} alt="" style={{ width: 48 * scale, height: 48 * scale, flexShrink: 0 }} />
+                <img src={locationIcon} alt="" style={{ width: 48, height: 48, flexShrink: 0 }} />
                 <p
                   style={{
                     ...TYPOGRAPHY.body,
-                    fontSize: 34 * scale,
-                    lineHeight: `${48 * scale}px`,
+                    fontSize: 34,
+                    lineHeight: '48px',
                     color: colors.text,
                   }}
                 >
@@ -323,14 +321,14 @@ export const SquareBanner = forwardRef<HTMLDivElement, SquareBannerProps>(
                 </p>
               </div>
 
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 * scale }}>
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={standIcon} alt="" style={{ width: 48 * scale, height: 48 * scale, flexShrink: 0 }} />
+                <img src={standIcon} alt="" style={{ width: 48, height: 48, flexShrink: 0 }} />
                 <p
                   style={{
                     ...TYPOGRAPHY.body,
-                    fontSize: 34 * scale,
-                    lineHeight: `${48 * scale}px`,
+                    fontSize: 34,
+                    lineHeight: '48px',
                     color: colors.text,
                   }}
                 >
@@ -346,12 +344,12 @@ export const SquareBanner = forwardRef<HTMLDivElement, SquareBannerProps>(
           <p
             style={{
               position: 'absolute',
-              left: 64 * scale,
-              top: 860 * scale,
-              width: 930 * scale,
+              left: 64,
+              top: 860,
+              width: 930,
               ...TYPOGRAPHY.body,
-              fontSize: 34 * scale,
-              lineHeight: `${48 * scale}px`,
+              fontSize: 34,
+              lineHeight: '48px',
               color: colors.text,
             }}
           >

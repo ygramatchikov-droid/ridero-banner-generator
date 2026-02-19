@@ -4,7 +4,7 @@ import { useRef, useState, useEffect } from 'react';
 import { useBannerStore } from '@/lib/store';
 import { Button, Input } from '@/components/ui';
 import { SquareBanner, VerticalBanner } from '@/components/templates';
-import { BannerFormat } from '@/lib/types';
+import { BannerFormat, FORMAT_DIMENSIONS } from '@/lib/types';
 
 export function Step5Preview() {
   const {
@@ -50,24 +50,33 @@ export function Step5Preview() {
 
   if (!bookData) return null;
 
-  const renderBannerPreview = (format: BannerFormat) => {
-    const props = {
-      book: bookData,
-      colorScheme,
-      bannerType,
-      presentation: presentationData,
-      title: editedTitle,
-      author: editedAuthor,
-      annotation: editedAnnotation,
-      qrUrl,
-    };
+  const bannerProps = {
+    book: bookData,
+    colorScheme,
+    bannerType,
+    presentation: presentationData,
+    title: editedTitle,
+    author: editedAuthor,
+    annotation: editedAnnotation,
+    qrUrl,
+  };
 
-    switch (format) {
-      case 'square':
-        return <SquareBanner {...props} scale={previewScale} />;
-      case 'vertical':
-        return <VerticalBanner {...props} scale={previewScale} />;
-    }
+  const renderBannerPreview = (format: BannerFormat) => {
+    const { width, height } = FORMAT_DIMENSIONS[format];
+    const scaledW = width * previewScale;
+    const scaledH = height * previewScale;
+
+    const banner = format === 'square'
+      ? <SquareBanner {...bannerProps} />
+      : <VerticalBanner {...bannerProps} />;
+
+    return (
+      <div style={{ width: scaledW, height: scaledH, overflow: 'hidden' }}>
+        <div style={{ transform: `scale(${previewScale})`, transformOrigin: 'top left' }}>
+          {banner}
+        </div>
+      </div>
+    );
   };
 
   return (
