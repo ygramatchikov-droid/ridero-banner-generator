@@ -85,13 +85,13 @@ export const useBannerStore = create<BannerStore>()(
 
       setBookData: (data) => set({
         bookData: data,
-        editedAnnotation: data?.annotation?.slice(0, 160) || '',
+        editedAnnotation: data?.annotation?.slice(0, 150) || '',
         qrUrl: data?.freeFragmentUrl || data?.bookUrl || '',
       }),
 
       setEditedTitle: (title) => set({ editedTitle: title }),
       setEditedAuthor: (author) => set({ editedAuthor: author }),
-      setEditedAnnotation: (annotation) => set({ editedAnnotation: annotation.slice(0, 160) }),
+      setEditedAnnotation: (annotation) => set({ editedAnnotation: annotation.slice(0, 150) }),
 
       setBannerType: (type) => set({ bannerType: type }),
 

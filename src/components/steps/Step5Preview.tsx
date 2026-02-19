@@ -112,17 +112,17 @@ export function Step5Preview() {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Аннотация (до{'\u00A0'}160 знаков)
+              Аннотация (до{'\u00A0'}150 знаков)
             </label>
             <textarea
               value={editedAnnotation}
               onChange={(e) => setEditedAnnotation(e.target.value)}
-              maxLength={160}
+              maxLength={150}
               rows={4}
               className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#FF7E00] transition-colors resize-none"
             />
             <p className="text-sm text-gray-500 mt-1">
-              {editedAnnotation.length}/160 знаков
+              {editedAnnotation.length}/150 знаков
             </p>
           </div>
 

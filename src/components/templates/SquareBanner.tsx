@@ -148,10 +148,10 @@ export const SquareBanner = forwardRef<HTMLDivElement, SquareBannerProps>(
                 {bannerTitle}
               </p>
 
-              {/* Date — icon 48x48 + PT Sans Bold 34px, gap=16 */}
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16, marginBottom: 32 }}>
+              {/* Date — icon 48x48 + PT Sans Bold 34px */}
+              <div style={{ position: 'relative', paddingLeft: 64, marginBottom: 32, minHeight: 48 }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={dateIcon} alt="" style={{ width: 48, height: 48, flexShrink: 0 }} />
+                <img src={dateIcon} alt="" style={{ position: 'absolute', left: 0, top: 0, width: 48, height: 48 }} />
                 <p
                   style={{
                     ...TYPOGRAPHY.bold,
@@ -164,10 +164,10 @@ export const SquareBanner = forwardRef<HTMLDivElement, SquareBannerProps>(
                 </p>
               </div>
 
-              {/* Location — icon 48x48 + PT Sans 34px, gap=16 */}
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16, marginBottom: 32 }}>
+              {/* Location — icon 48x48 + PT Sans 34px */}
+              <div style={{ position: 'relative', paddingLeft: 64, marginBottom: 32, minHeight: 48 }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={locationIcon} alt="" style={{ width: 48, height: 48, flexShrink: 0 }} />
+                <img src={locationIcon} alt="" style={{ position: 'absolute', left: 0, top: 0, width: 48, height: 48 }} />
                 <p
                   style={{
                     ...TYPOGRAPHY.body,
@@ -180,10 +180,10 @@ export const SquareBanner = forwardRef<HTMLDivElement, SquareBannerProps>(
                 </p>
               </div>
 
-              {/* Stand — icon 48x48 + PT Sans 34px, gap=16 */}
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 }}>
+              {/* Stand — icon 48x48 + PT Sans 34px */}
+              <div style={{ position: 'relative', paddingLeft: 64, minHeight: 48 }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={standIcon} alt="" style={{ width: 48, height: 48, flexShrink: 0 }} />
+                <img src={standIcon} alt="" style={{ position: 'absolute', left: 0, top: 0, width: 48, height: 48 }} />
                 <p
                   style={{
                     ...TYPOGRAPHY.body,
@@ -209,10 +209,6 @@ export const SquareBanner = forwardRef<HTMLDivElement, SquareBannerProps>(
                 borderRadius: 8,
                 boxShadow: SHADOWS.card,
                 zIndex: 2,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'flex-start',
                 paddingTop: 16,
                 paddingLeft: 32,
                 paddingRight: 32,
@@ -278,22 +274,19 @@ export const SquareBanner = forwardRef<HTMLDivElement, SquareBannerProps>(
               </p>
             )}
 
-            {/* Figma Presentation: Date, Location & Stand — x=600, y=480, w=416, gap=32 */}
+            {/* Figma Presentation: Date, Location & Stand — x=600, y=480, w=416 */}
             <div
               style={{
                 position: 'absolute',
                 left: 600,
                 top: 480,
                 width: 416,
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 32,
               }}
             >
-              {/* Date — icon 48x48 + PT Sans Bold 34px, gap=16 */}
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 }}>
+              {/* Date — icon 48x48 + PT Sans Bold 34px */}
+              <div style={{ position: 'relative', paddingLeft: 64, marginBottom: 32, minHeight: 48 }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={dateIcon} alt="" style={{ width: 48, height: 48, flexShrink: 0 }} />
+                <img src={dateIcon} alt="" style={{ position: 'absolute', left: 0, top: 0, width: 48, height: 48 }} />
                 <p
                   style={{
                     ...TYPOGRAPHY.bold,
@@ -306,9 +299,10 @@ export const SquareBanner = forwardRef<HTMLDivElement, SquareBannerProps>(
                 </p>
               </div>
 
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 }}>
+              {/* Location — icon 48x48 + PT Sans 34px */}
+              <div style={{ position: 'relative', paddingLeft: 64, marginBottom: 32, minHeight: 48 }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={locationIcon} alt="" style={{ width: 48, height: 48, flexShrink: 0 }} />
+                <img src={locationIcon} alt="" style={{ position: 'absolute', left: 0, top: 0, width: 48, height: 48 }} />
                 <p
                   style={{
                     ...TYPOGRAPHY.body,
@@ -321,9 +315,10 @@ export const SquareBanner = forwardRef<HTMLDivElement, SquareBannerProps>(
                 </p>
               </div>
 
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 }}>
+              {/* Stand — icon 48x48 + PT Sans 34px */}
+              <div style={{ position: 'relative', paddingLeft: 64, minHeight: 48 }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={standIcon} alt="" style={{ width: 48, height: 48, flexShrink: 0 }} />
+                <img src={standIcon} alt="" style={{ position: 'absolute', left: 0, top: 0, width: 48, height: 48 }} />
                 <p
                   style={{
                     ...TYPOGRAPHY.body,

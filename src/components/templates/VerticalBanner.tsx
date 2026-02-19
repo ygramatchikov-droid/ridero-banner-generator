@@ -104,22 +104,20 @@ export const VerticalBanner = forwardRef<HTMLDivElement, VerticalBannerProps>(
           {bannerTitle}
         </p>
 
-        {/* Figma: Date + Location + Stand row — x=80, y=336, h=48, gap=32 between groups (book type only) */}
+        {/* Figma: Date + Location + Stand row — x=80, y=336, h=48 (book type only) */}
         {bannerType === 'book' && (
           <div
             style={{
               position: 'absolute',
               left: 80,
               top: 336,
-              display: 'flex',
-              alignItems: 'flex-start',
-              gap: 32,
             }}
           >
-            {/* Date: icon 48x48 + text, inner gap=16 */}
-            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 }}>
+            {/* Use inline-block groups instead of flex to avoid foreignObject issues */}
+            {/* Date: icon 48x48 + text */}
+            <div style={{ display: 'inline-block', verticalAlign: 'top', position: 'relative', paddingLeft: 64, marginRight: 32 }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={dateIcon} alt="" style={{ width: 48, height: 48, flexShrink: 0 }} />
+              <img src={dateIcon} alt="" style={{ position: 'absolute', left: 0, top: 0, width: 48, height: 48 }} />
               <p
                 style={{
                   ...TYPOGRAPHY.bold,
@@ -133,10 +131,10 @@ export const VerticalBanner = forwardRef<HTMLDivElement, VerticalBannerProps>(
               </p>
             </div>
 
-            {/* Location: icon 48x48 + text, inner gap=16 */}
-            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 }}>
+            {/* Location: icon 48x48 + text */}
+            <div style={{ display: 'inline-block', verticalAlign: 'top', position: 'relative', paddingLeft: 64, marginRight: 32 }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={locationIcon} alt="" style={{ width: 48, height: 48, flexShrink: 0 }} />
+              <img src={locationIcon} alt="" style={{ position: 'absolute', left: 0, top: 0, width: 48, height: 48 }} />
               <p
                 style={{
                   ...TYPOGRAPHY.body,
@@ -150,10 +148,10 @@ export const VerticalBanner = forwardRef<HTMLDivElement, VerticalBannerProps>(
               </p>
             </div>
 
-            {/* Stand: icon 48x48 + text, inner gap=16 */}
-            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 }}>
+            {/* Stand: icon 48x48 + text */}
+            <div style={{ display: 'inline-block', verticalAlign: 'top', position: 'relative', paddingLeft: 64 }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={standIcon} alt="" style={{ width: 48, height: 48, flexShrink: 0 }} />
+              <img src={standIcon} alt="" style={{ position: 'absolute', left: 0, top: 0, width: 48, height: 48 }} />
               <p
                 style={{
                   ...TYPOGRAPHY.body,
@@ -223,10 +221,6 @@ export const VerticalBanner = forwardRef<HTMLDivElement, VerticalBannerProps>(
               borderRadius: 16,
               boxShadow: SHADOWS.cardLarge,
               zIndex: 2,
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 16,
-              alignItems: 'flex-start',
             }}
           >
             {/* "Сканируй и читай:" — PT Sans 28px, w=240 */}
@@ -237,6 +231,7 @@ export const VerticalBanner = forwardRef<HTMLDivElement, VerticalBannerProps>(
                 lineHeight: '32px',
                 color: '#000000',
                 width: 240,
+                marginBottom: 16,
               }}
             >
               Сканируй и читай:
@@ -263,11 +258,6 @@ export const VerticalBanner = forwardRef<HTMLDivElement, VerticalBannerProps>(
               borderRadius: 16,
               boxShadow: SHADOWS.cardLarge,
               zIndex: 2,
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 32,
-              alignItems: 'flex-start',
-              justifyContent: 'center',
             }}
           >
             {/* Time — PT Serif Bold 72px */}
@@ -279,7 +269,7 @@ export const VerticalBanner = forwardRef<HTMLDivElement, VerticalBannerProps>(
                   fontSize: 72,
                   lineHeight: '88px',
                   color: '#000000',
-                  width: '100%',
+                  marginBottom: 32,
                 }}
               >
                 {presentation.time}
@@ -287,10 +277,10 @@ export const VerticalBanner = forwardRef<HTMLDivElement, VerticalBannerProps>(
             )}
 
             {/* Always use black icons on the white info card */}
-            {/* Date — icon 48x48 + PT Sans Bold 34px, gap=16 */}
-            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16, width: '100%' }}>
+            {/* Date — icon 48x48 + PT Sans Bold 34px */}
+            <div style={{ position: 'relative', paddingLeft: 64, marginBottom: 32, minHeight: 48 }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/assets/Дата, черный.svg" alt="" style={{ width: 48, height: 48, flexShrink: 0 }} />
+              <img src="/assets/Дата, черный.svg" alt="" style={{ position: 'absolute', left: 0, top: 0, width: 48, height: 48 }} />
               <p
                 style={{
                   ...TYPOGRAPHY.bold,
@@ -303,10 +293,10 @@ export const VerticalBanner = forwardRef<HTMLDivElement, VerticalBannerProps>(
               </p>
             </div>
 
-            {/* Location — icon 48x48 + PT Sans 34px, gap=16 */}
-            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16, width: '100%' }}>
+            {/* Location — icon 48x48 + PT Sans 34px */}
+            <div style={{ position: 'relative', paddingLeft: 64, marginBottom: 32, minHeight: 48 }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/assets/Место, черный.svg" alt="" style={{ width: 48, height: 48, flexShrink: 0 }} />
+              <img src="/assets/Место, черный.svg" alt="" style={{ position: 'absolute', left: 0, top: 0, width: 48, height: 48 }} />
               <p
                 style={{
                   ...TYPOGRAPHY.body,
@@ -319,10 +309,10 @@ export const VerticalBanner = forwardRef<HTMLDivElement, VerticalBannerProps>(
               </p>
             </div>
 
-            {/* Stand — icon 48x48 + PT Sans 34px, gap=16 */}
-            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16, width: '100%' }}>
+            {/* Stand — icon 48x48 + PT Sans 34px */}
+            <div style={{ position: 'relative', paddingLeft: 64, minHeight: 48 }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/assets/Стенд, черный.svg" alt="" style={{ width: 48, height: 48, flexShrink: 0 }} />
+              <img src="/assets/Стенд, черный.svg" alt="" style={{ position: 'absolute', left: 0, top: 0, width: 48, height: 48 }} />
               <p
                 style={{
                   ...TYPOGRAPHY.body,
