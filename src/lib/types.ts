@@ -9,6 +9,7 @@ export interface BookData {
 
 export interface PresentationData {
   exhibitionName: string; // e.g. "Презентация моей книги на Non/fiction!"
+  date: string;           // e.g. "5–9 декабря"
   time: string;           // e.g. "14:30–15:00"
   location: string;       // e.g. "Москва, Гостиный двор"
   stand: string;          // e.g. "Стенд Е-19"

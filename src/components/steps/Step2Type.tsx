@@ -75,6 +75,13 @@ export function Step2Type() {
           />
 
           <Input
+            label="Дата"
+            placeholder="9–12 апреля"
+            value={presentationData.date}
+            onChange={(e) => setPresentationData({ date: e.target.value })}
+          />
+
+          <Input
             label="Место"
             placeholder="Москва, Гостиный двор"
             value={presentationData.location}
@@ -100,6 +107,13 @@ export function Step2Type() {
             placeholder="Non/fiction"
             value={presentationData.exhibitionName}
             onChange={(e) => setPresentationData({ exhibitionName: e.target.value })}
+          />
+
+          <Input
+            label="Дата"
+            placeholder="9 апреля"
+            value={presentationData.date}
+            onChange={(e) => setPresentationData({ date: e.target.value })}
           />
 
           <Input

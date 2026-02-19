@@ -64,6 +64,7 @@ const initialState = {
   bannerType: 'book' as BannerType,
   presentationData: {
     exhibitionName: '',
+    date: '',
     time: '',
     location: '',
     stand: '',

@@ -135,6 +135,15 @@ export function Step5Preview() {
             }
           />
 
+          <Input
+            label="Дата"
+            placeholder={bannerType === 'book' ? '9–12 апреля' : '9 апреля'}
+            value={presentationData.date}
+            onChange={(e) =>
+              setPresentationData({ date: e.target.value })
+            }
+          />
+
           {bannerType === 'presentation' && (
             <Input
               label="Время"

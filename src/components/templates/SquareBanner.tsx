@@ -44,6 +44,7 @@ export const SquareBanner = forwardRef<HTMLDivElement, SquareBannerProps>(
     const size = 1080 * scale;
     const backgroundSvg = BACKGROUND_MAP[colorScheme];
     const logoSvg = colors.logoVariant === 'white' ? '/assets/Лого белый.svg' : '/assets/Лого черный.svg';
+    const dateIcon = colors.logoVariant === 'white' ? '/assets/Дата, белый.svg' : '/assets/Дата, черный.svg';
     const locationIcon = colors.logoVariant === 'white' ? '/assets/Место, белый.svg' : '/assets/Место, черный.svg';
     const standIcon = colors.logoVariant === 'white' ? '/assets/Стенд, белый.svg' : '/assets/Стенд, черный.svg';
 
@@ -127,12 +128,12 @@ export const SquareBanner = forwardRef<HTMLDivElement, SquareBannerProps>(
         {/* Right column content — depends on banner type */}
         {bannerType === 'book' ? (
           <>
-            {/* Figma Book: Event info — x=600, y=200, w=416 */}
+            {/* Figma Book: Event info — x=600, y=168, w=416 */}
             <div
               style={{
                 position: 'absolute',
                 left: 600 * scale,
-                top: 200 * scale,
+                top: 168 * scale,
                 width: 416 * scale,
               }}
             >
@@ -148,6 +149,22 @@ export const SquareBanner = forwardRef<HTMLDivElement, SquareBannerProps>(
               >
                 {bannerTitle}
               </p>
+
+              {/* Date — icon 48x48 + PT Sans Bold 34px, gap=16 */}
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 * scale, marginBottom: 32 * scale }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={dateIcon} alt="" style={{ width: 48 * scale, height: 48 * scale, flexShrink: 0 }} />
+                <p
+                  style={{
+                    ...TYPOGRAPHY.bold,
+                    fontSize: 34 * scale,
+                    lineHeight: `${48 * scale}px`,
+                    color: colors.text,
+                  }}
+                >
+                  {presentation?.date || '5–9 декабря'}
+                </p>
+              </div>
 
               {/* Location — icon 48x48 + PT Sans 34px, gap=16 */}
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 * scale, marginBottom: 32 * scale }}>
@@ -263,7 +280,7 @@ export const SquareBanner = forwardRef<HTMLDivElement, SquareBannerProps>(
               </p>
             )}
 
-            {/* Figma Presentation: Location & Stand — x=600, y=480, w=416, gap=32 */}
+            {/* Figma Presentation: Date, Location & Stand — x=600, y=480, w=416, gap=32 */}
             <div
               style={{
                 position: 'absolute',
@@ -275,6 +292,22 @@ export const SquareBanner = forwardRef<HTMLDivElement, SquareBannerProps>(
                 gap: 32 * scale,
               }}
             >
+              {/* Date — icon 48x48 + PT Sans Bold 34px, gap=16 */}
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 * scale }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={dateIcon} alt="" style={{ width: 48 * scale, height: 48 * scale, flexShrink: 0 }} />
+                <p
+                  style={{
+                    ...TYPOGRAPHY.bold,
+                    fontSize: 34 * scale,
+                    lineHeight: `${48 * scale}px`,
+                    color: colors.text,
+                  }}
+                >
+                  {presentation?.date || '5 мая'}
+                </p>
+              </div>
+
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 * scale }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={locationIcon} alt="" style={{ width: 48 * scale, height: 48 * scale, flexShrink: 0 }} />

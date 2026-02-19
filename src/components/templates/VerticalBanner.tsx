@@ -45,6 +45,7 @@ export const VerticalBanner = forwardRef<HTMLDivElement, VerticalBannerProps>(
     const height = 1920 * scale;
     const backgroundSvg = BACKGROUND_MAP[colorScheme];
     const logoSvg = colors.logoVariant === 'white' ? '/assets/Лого белый.svg' : '/assets/Лого черный.svg';
+    const dateIcon = colors.logoVariant === 'white' ? '/assets/Дата, белый.svg' : '/assets/Дата, черный.svg';
     const locationIcon = colors.logoVariant === 'white' ? '/assets/Место, белый.svg' : '/assets/Место, черный.svg';
     const standIcon = colors.logoVariant === 'white' ? '/assets/Стенд, белый.svg' : '/assets/Стенд, черный.svg';
 
@@ -106,7 +107,7 @@ export const VerticalBanner = forwardRef<HTMLDivElement, VerticalBannerProps>(
           {bannerTitle}
         </p>
 
-        {/* Figma: Location + Stand row — x=80, y=336, h=48, gap=32 between groups (book type only) */}
+        {/* Figma: Date + Location + Stand row — x=80, y=336, h=48, gap=32 between groups (book type only) */}
         {bannerType === 'book' && (
           <div
             style={{
@@ -118,6 +119,23 @@ export const VerticalBanner = forwardRef<HTMLDivElement, VerticalBannerProps>(
               gap: 32 * scale,
             }}
           >
+            {/* Date: icon 48x48 + text, inner gap=16 */}
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 * scale }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={dateIcon} alt="" style={{ width: 48 * scale, height: 48 * scale, flexShrink: 0 }} />
+              <p
+                style={{
+                  ...TYPOGRAPHY.bold,
+                  fontSize: 34 * scale,
+                  lineHeight: `${48 * scale}px`,
+                  color: colors.text,
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                {presentation?.date || '5–9 декабря'}
+              </p>
+            </div>
+
             {/* Location: icon 48x48 + text, inner gap=16 */}
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 * scale }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -236,12 +254,12 @@ export const VerticalBanner = forwardRef<HTMLDivElement, VerticalBannerProps>(
             />
           </div>
         ) : (
-          /* Figma Presentation: Info card — x=544, y=1208, w=488, padding=32, radius=16 */
+          /* Figma Presentation: Info card — x=544, y=1160, w=488, padding=32, radius=16 */
           <div
             style={{
               position: 'absolute',
               left: 544 * scale,
-              top: 1208 * scale,
+              top: 1160 * scale,
               width: 488 * scale,
               padding: 32 * scale,
               backgroundColor: colors.cardBg,
@@ -272,6 +290,22 @@ export const VerticalBanner = forwardRef<HTMLDivElement, VerticalBannerProps>(
             )}
 
             {/* Always use black icons on the white info card */}
+            {/* Date — icon 48x48 + PT Sans Bold 34px, gap=16 */}
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 * scale, width: '100%' }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/assets/Дата, черный.svg" alt="" style={{ width: 48 * scale, height: 48 * scale, flexShrink: 0 }} />
+              <p
+                style={{
+                  ...TYPOGRAPHY.bold,
+                  fontSize: 34 * scale,
+                  lineHeight: `${48 * scale}px`,
+                  color: '#000000',
+                }}
+              >
+                {presentation?.date || '5 мая'}
+              </p>
+            </div>
+
             {/* Location — icon 48x48 + PT Sans 34px, gap=16 */}
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 * scale, width: '100%' }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
