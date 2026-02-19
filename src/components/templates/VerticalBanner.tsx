@@ -87,12 +87,13 @@ export const VerticalBanner = forwardRef<HTMLDivElement, VerticalBannerProps>(
           />
         </div>
 
-        {/* Figma: Banner title — x=80, top=160, PT Serif Bold 60px, w=664 */}
+        {/* Banner title — x=80, top=88, PT Serif Bold 60px, w=664
+             top=88 gives room for 3-line wrapping (88+216=304, matching Figma bottom-align at y=304) */}
         <p
           style={{
             position: 'absolute',
             left: 80,
-            top: 160,
+            top: 88,
             width: 664,
             ...TYPOGRAPHY.title,
             fontWeight: 700,

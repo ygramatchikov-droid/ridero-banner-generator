@@ -173,7 +173,7 @@ export function Step6Download() {
   return (
     <div className="max-w-4xl mx-auto">
       {/* Hidden render area for generation */}
-      <div className="absolute left-[-9999px] top-0">
+      <div className="fixed left-[-9999px] top-0">
         {selectedFormats.includes('square') && (
           <SquareBanner ref={squareRef} {...bannerProps} />
         )}
