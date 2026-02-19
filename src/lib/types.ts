@@ -101,21 +101,29 @@ export const TYPOGRAPHY = {
   title: {
     fontFamily: "'PT Serif', Georgia, serif",
     fontWeight: 700,
+    margin: 0,
+    padding: 0,
   },
   // PT Sans Bold - for author name, headings
   heading: {
     fontFamily: "'PT Sans', 'Helvetica Neue', sans-serif",
     fontWeight: 700,
+    margin: 0,
+    padding: 0,
   },
   // PT Sans Regular - for body text, location, stand
   body: {
     fontFamily: "'PT Sans', 'Helvetica Neue', sans-serif",
     fontWeight: 400,
+    margin: 0,
+    padding: 0,
   },
   // PT Sans Bold — for exhibition name, headings on banners
   bold: {
     fontFamily: "'PT Sans', 'Helvetica Neue', sans-serif",
     fontWeight: 700,
+    margin: 0,
+    padding: 0,
   },
 };
 
