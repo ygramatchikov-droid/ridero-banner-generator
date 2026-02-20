@@ -116,7 +116,7 @@ export const VerticalBanner = forwardRef<HTMLDivElement, VerticalBannerProps>(
           >
             {/* Use inline-block groups instead of flex to avoid foreignObject issues */}
             {/* Date: icon 48x48 + text */}
-            <div style={{ display: 'inline-block', verticalAlign: 'top', position: 'relative', paddingLeft: 64, marginRight: 32 }}>
+            <div style={{ display: 'inline-block', verticalAlign: 'top', position: 'relative', paddingLeft: 64, marginRight: 32, marginBottom: 32 }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={dateIcon} alt="" style={{ position: 'absolute', left: 0, top: 0, width: 48, height: 48 }} />
               <p
@@ -133,7 +133,7 @@ export const VerticalBanner = forwardRef<HTMLDivElement, VerticalBannerProps>(
             </div>
 
             {/* Location: icon 48x48 + text */}
-            <div style={{ display: 'inline-block', verticalAlign: 'top', position: 'relative', paddingLeft: 64, marginRight: 32 }}>
+            <div style={{ display: 'inline-block', verticalAlign: 'top', position: 'relative', paddingLeft: 64, marginRight: 32, marginBottom: 32 }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={locationIcon} alt="" style={{ position: 'absolute', left: 0, top: 0, width: 48, height: 48 }} />
               <p
@@ -150,7 +150,7 @@ export const VerticalBanner = forwardRef<HTMLDivElement, VerticalBannerProps>(
             </div>
 
             {/* Stand: icon 48x48 + text */}
-            <div style={{ display: 'inline-block', verticalAlign: 'top', position: 'relative', paddingLeft: 64 }}>
+            <div style={{ display: 'inline-block', verticalAlign: 'top', position: 'relative', paddingLeft: 64, marginBottom: 32 }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={standIcon} alt="" style={{ position: 'absolute', left: 0, top: 0, width: 48, height: 48 }} />
               <p
