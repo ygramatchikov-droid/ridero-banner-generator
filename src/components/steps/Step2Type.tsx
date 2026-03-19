@@ -30,8 +30,7 @@ export function Step2Type() {
     nextStep
   } = useBannerStore();
 
-  const canProceed = bannerType === 'book' ||
-    (presentationData.time && presentationData.location && presentationData.stand);
+  const canProceed = true;
 
   return (
     <div className="max-w-3xl mx-auto">

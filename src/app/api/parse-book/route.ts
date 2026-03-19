@@ -106,20 +106,25 @@ function parseRideroPage(html: string, bookUrl: string): BookData | null {
   try {
     let coverUrl = '';
 
-    const ogImageMatch = html.match(/<meta[^>]*property="og:image"[^>]*content="([^"]+)"/i);
-    if (ogImageMatch) {
-      coverUrl = ogImageMatch[1];
+    // Prefer clean cover from store.ridero.ru (no promotional stickers)
+    // Match width-based URLs (w350, w200, etc.) with cover-front in the key
+    const storeImageMatch = html.match(/https:\/\/store\.ridero\.ru\/images\/w\d+\?[^"'\s]*cover-front[^"'\s]*/i);
+    if (storeImageMatch) {
+      // HTML encodes & as &amp; — decode it back
+      coverUrl = storeImageMatch[0].replace(/&amp;/g, '&');
     }
 
+    // Fallback: og:image (may include promotional badges/stickers)
     if (!coverUrl) {
-      const storeImageMatch = html.match(/https:\/\/store\.ridero\.ru\/images\/[^"'\s]+cover[^"'\s]*/i);
-      if (storeImageMatch) {
-        coverUrl = storeImageMatch[0];
+      const ogImageMatch = html.match(/<meta[^>]*property="og:image"[^>]*content="([^"]+)"/i);
+      if (ogImageMatch) {
+        coverUrl = ogImageMatch[1];
       }
     }
 
-    if (coverUrl.includes('w350')) {
-      coverUrl = coverUrl.replace('w350', 'w800');
+    // Upscale to w800 for better quality
+    if (coverUrl.match(/\/images\/w\d+\?/)) {
+      coverUrl = coverUrl.replace(/\/images\/w\d+\?/, '/images/w800?');
     }
 
     let title = '';

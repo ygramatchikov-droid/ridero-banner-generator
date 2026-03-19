@@ -116,7 +116,7 @@ export const VerticalBanner = forwardRef<HTMLDivElement, VerticalBannerProps>(
           >
             {/* Use inline-block groups instead of flex to avoid foreignObject issues */}
             {/* Date: icon 48x48 + text */}
-            <div style={{ display: 'inline-block', verticalAlign: 'top', position: 'relative', paddingLeft: 64, marginRight: 32, marginBottom: 32 }}>
+            <div style={{ display: 'inline-block', verticalAlign: 'top', position: 'relative', paddingLeft: 64, marginRight: 32, marginBottom: 24 }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={dateIcon} alt="" style={{ position: 'absolute', left: 0, top: 0, width: 48, height: 48 }} />
               <p
@@ -128,12 +128,12 @@ export const VerticalBanner = forwardRef<HTMLDivElement, VerticalBannerProps>(
                   whiteSpace: 'nowrap',
                 }}
               >
-                {presentation?.date || '5–9 декабря'}
+                {presentation?.date || '9–12 апреля'}
               </p>
             </div>
 
             {/* Location: icon 48x48 + text */}
-            <div style={{ display: 'inline-block', verticalAlign: 'top', position: 'relative', paddingLeft: 64, marginRight: 32, marginBottom: 32 }}>
+            <div style={{ display: 'inline-block', verticalAlign: 'top', position: 'relative', paddingLeft: 64, marginRight: 32, marginBottom: 24 }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={locationIcon} alt="" style={{ position: 'absolute', left: 0, top: 0, width: 48, height: 48 }} />
               <p
@@ -150,7 +150,7 @@ export const VerticalBanner = forwardRef<HTMLDivElement, VerticalBannerProps>(
             </div>
 
             {/* Stand: icon 48x48 + text */}
-            <div style={{ display: 'inline-block', verticalAlign: 'top', position: 'relative', paddingLeft: 64, marginBottom: 32 }}>
+            <div style={{ display: 'inline-block', verticalAlign: 'top', position: 'relative', paddingLeft: 64, marginBottom: 24 }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={standIcon} alt="" style={{ position: 'absolute', left: 0, top: 0, width: 48, height: 48 }} />
               <p
@@ -162,7 +162,7 @@ export const VerticalBanner = forwardRef<HTMLDivElement, VerticalBannerProps>(
                   whiteSpace: 'nowrap',
                 }}
               >
-                {presentation?.stand || 'Стенд Е-19'}
+                {presentation?.stand || 'Стенд Е-32'}
               </p>
             </div>
           </div>
@@ -262,24 +262,22 @@ export const VerticalBanner = forwardRef<HTMLDivElement, VerticalBannerProps>(
             }}
           >
             {/* Time — PT Serif Bold 72px */}
-            {presentation?.time && (
-              <p
-                style={{
-                  ...TYPOGRAPHY.title,
-                  fontWeight: 700,
-                  fontSize: 72,
-                  lineHeight: '88px',
-                  color: '#000000',
-                  marginBottom: 32,
-                }}
-              >
-                {presentation.time}
-              </p>
-            )}
+            <p
+              style={{
+                ...TYPOGRAPHY.title,
+                fontWeight: 700,
+                fontSize: 72,
+                lineHeight: '88px',
+                color: '#000000',
+                marginBottom: 24,
+              }}
+            >
+              {presentation?.time || '14:30–15:00'}
+            </p>
 
             {/* Always use black icons on the white info card */}
             {/* Date — icon 48x48 + PT Sans Bold 34px */}
-            <div style={{ position: 'relative', paddingLeft: 64, marginBottom: 32, minHeight: 48 }}>
+            <div style={{ position: 'relative', paddingLeft: 64, marginBottom: 24, minHeight: 48 }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/assets/Дата, черный.svg" alt="" style={{ position: 'absolute', left: 0, top: 0, width: 48, height: 48 }} />
               <p
@@ -290,12 +288,12 @@ export const VerticalBanner = forwardRef<HTMLDivElement, VerticalBannerProps>(
                   color: '#000000',
                 }}
               >
-                {presentation?.date || '5 мая'}
+                {presentation?.date || '9 апреля'}
               </p>
             </div>
 
             {/* Location — icon 48x48 + PT Sans 34px */}
-            <div style={{ position: 'relative', paddingLeft: 64, marginBottom: 32, minHeight: 48 }}>
+            <div style={{ position: 'relative', paddingLeft: 64, marginBottom: 24, minHeight: 48 }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/assets/Место, черный.svg" alt="" style={{ position: 'absolute', left: 0, top: 0, width: 48, height: 48 }} />
               <p
@@ -322,7 +320,7 @@ export const VerticalBanner = forwardRef<HTMLDivElement, VerticalBannerProps>(
                   color: '#000000',
                 }}
               >
-                {presentation?.stand || 'Стенд Е-19'}
+                {presentation?.stand || 'Стенд Е-32'}
               </p>
             </div>
           </div>

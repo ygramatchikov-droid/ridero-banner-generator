@@ -95,27 +95,6 @@ export function Step1Url() {
         </Button>
       </form>
 
-      <div className="mt-8 p-4 bg-gray-50 rounded-xl">
-        <p className="text-sm text-gray-500 text-center">
-          Примеры ссылок для{'\u00A0'}тестирования:
-        </p>
-        <div className="mt-2 space-y-1">
-          <button
-            type="button"
-            onClick={() => setBookUrl('https://ridero.ru/books/skoraya/')}
-            className="block w-full text-sm text-[#FF7E00] hover:underline text-left truncate"
-          >
-            ridero.ru/books/skoraya/
-          </button>
-          <button
-            type="button"
-            onClick={() => setBookUrl('https://ridero.ru/books/menedzher_transformacii/')}
-            className="block w-full text-sm text-[#FF7E00] hover:underline text-left truncate"
-          >
-            ridero.ru/books/menedzher_transformacii/
-          </button>
-        </div>
-      </div>
     </div>
   );
 }

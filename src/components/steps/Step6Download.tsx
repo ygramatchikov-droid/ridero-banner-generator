@@ -3,7 +3,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { domToBlob } from 'modern-screenshot';
 import JSZip from 'jszip';
-import { saveAs } from 'file-saver';
 import { useBannerStore } from '@/lib/store';
 import { Button } from '@/components/ui';
 import { SquareBanner, VerticalBanner } from '@/components/templates';
@@ -36,6 +35,7 @@ export function Step6Download() {
   const [isGenerating, setIsGenerating] = useState(true);
   const [generatedBanners, setGeneratedBanners] = useState<GeneratedBanner[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [overlayDataUrl, setOverlayDataUrl] = useState<string | null>(null);
 
   const squareRef = useRef<HTMLDivElement>(null);
   const verticalRef = useRef<HTMLDivElement>(null);
@@ -130,23 +130,60 @@ export function Step6Download() {
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const handleDownloadSingle = (banner: GeneratedBanner) => {
-    const { width, height, label } = FORMAT_DIMENSIONS[banner.format];
-    const fileName = `${bookSlug}_${label.toLowerCase()}_${width}x${height}.png`;
-    saveAs(banner.blob, fileName);
+  const isMobile = () =>
+    /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) ||
+    ('ontouchend' in document);
+
+  const makeFileName = (format: BannerFormat) => {
+    const { width, height, label } = FORMAT_DIMENSIONS[format];
+    return `${bookSlug}_${label.toLowerCase()}_${width}x${height}.png`;
+  };
+
+  const blobToDataUrl = (blob: Blob): Promise<string> =>
+    new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result as string);
+      reader.readAsDataURL(blob);
+    });
+
+  const handleDownloadSingle = async (banner: GeneratedBanner) => {
+    if (isMobile()) {
+      // Convert blob → data URL so WebView context menus can save the image
+      const dataUrl = await blobToDataUrl(banner.blob);
+      setOverlayDataUrl(dataUrl);
+      return;
+    }
+    const a = document.createElement('a');
+    a.href = banner.previewUrl;
+    a.download = makeFileName(banner.format);
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
   };
 
   const handleDownloadAll = async () => {
+    if (isMobile()) {
+      // Mobile: show first banner in overlay (user saves one at a time)
+      if (generatedBanners.length > 0) {
+        const dataUrl = await blobToDataUrl(generatedBanners[0].blob);
+        setOverlayDataUrl(dataUrl);
+      }
+      return;
+    }
+
     const zip = new JSZip();
-
     generatedBanners.forEach((banner) => {
-      const { width, height, label } = FORMAT_DIMENSIONS[banner.format];
-      const fileName = `${bookSlug}_${label.toLowerCase()}_${width}x${height}.png`;
-      zip.file(fileName, banner.blob);
+      zip.file(makeFileName(banner.format), banner.blob);
     });
-
     const content = await zip.generateAsync({ type: 'blob' });
-    saveAs(content, `${bookSlug}_banners.zip`);
+    const url = URL.createObjectURL(content);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${bookSlug}_banners.zip`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
   };
 
   const handleReset = () => {
@@ -220,6 +257,9 @@ export function Step6Download() {
             <p className="text-gray-600 text-lg">
               Скачайте баннеры для{'\u00A0'}публикации в{'\u00A0'}соцсетях
             </p>
+            <p className="text-gray-400 text-sm mt-3 sm:hidden">
+              Если скачивание не{'\u00A0'}работает, откройте страницу в{'\u00A0'}браузере (Chrome, Safari) через{'\u00A0'}меню{'\u00A0'}{'\u22EE'}{'\u00A0'}{'\u2192'}{'\u00A0'}«Открыть в{'\u00A0'}браузере»
+            </p>
           </>
         )}
       </div>
@@ -278,6 +318,63 @@ export function Step6Download() {
             </Button>
           </div>
         </>
+      )}
+      {/* Mobile save overlay — uses data URL so WebView "Save image" works */}
+      {overlayDataUrl && (
+        <div
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 50,
+            backgroundColor: 'rgba(0,0,0,0.9)',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: 16,
+          }}
+          onClick={() => setOverlayDataUrl(null)}
+        >
+          <p
+            style={{
+              color: 'white',
+              fontSize: 18,
+              marginBottom: 16,
+              textAlign: 'center',
+              fontFamily: "'PT Sans', sans-serif",
+            }}
+          >
+            Удерживайте изображение {'\u2192'} «Скачать» или{'\u00A0'}«Сохранить»
+          </p>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={overlayDataUrl}
+            alt="Banner"
+            style={{
+              maxWidth: '100%',
+              maxHeight: 'calc(100vh - 140px)',
+              objectFit: 'contain',
+              borderRadius: 8,
+            }}
+            onClick={(e) => e.stopPropagation()}
+          />
+          <button
+            onClick={() => setOverlayDataUrl(null)}
+            style={{
+              marginTop: 16,
+              color: 'white',
+              fontSize: 16,
+              background: 'none',
+              border: '1px solid rgba(255,255,255,0.5)',
+              borderRadius: 8,
+              padding: '10px 32px',
+              fontFamily: "'PT Sans', sans-serif",
+              cursor: 'pointer',
+            }}
+          >
+            Закрыть
+          </button>
+        </div>
       )}
     </div>
   );

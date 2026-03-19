@@ -1,6 +1,6 @@
 'use client';
 
-import { forwardRef } from 'react';
+import { forwardRef, useRef, useState, useEffect } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import {
   BookData,
@@ -50,6 +50,19 @@ export const SquareBanner = forwardRef<HTMLDivElement, SquareBannerProps>(
     const bannerTitle = bannerType === 'book'
       ? `Моя книга на\u00A0${exhibitionName}!`
       : `Презентация моей книги на\u00A0${exhibitionName}!`;
+
+    // Hide QR when text block overflows into QR card area (book type only)
+    const textBlockRef = useRef<HTMLDivElement>(null);
+    const [hideQr, setHideQr] = useState(false);
+
+    useEffect(() => {
+      if (bannerType === 'book' && textBlockRef.current) {
+        const textBottom = 168 + textBlockRef.current.scrollHeight;
+        setHideQr(textBottom > 525);
+      } else {
+        setHideQr(false);
+      }
+    });
 
     return (
       <div
@@ -128,6 +141,7 @@ export const SquareBanner = forwardRef<HTMLDivElement, SquareBannerProps>(
           <>
             {/* Figma Book: Event info — x=600, y=168, w=416 */}
             <div
+              ref={textBlockRef}
               style={{
                 position: 'absolute',
                 left: 600,
@@ -160,7 +174,7 @@ export const SquareBanner = forwardRef<HTMLDivElement, SquareBannerProps>(
                     color: colors.text,
                   }}
                 >
-                  {presentation?.date || '5–9 декабря'}
+                  {presentation?.date || '9–12 апреля'}
                 </p>
               </div>
 
@@ -192,13 +206,13 @@ export const SquareBanner = forwardRef<HTMLDivElement, SquareBannerProps>(
                     color: colors.text,
                   }}
                 >
-                  {presentation?.stand || 'Стенд Е-19'}
+                  {presentation?.stand || 'Стенд Е-32'}
                 </p>
               </div>
             </div>
 
             {/* Figma Book: QR block — x=512, y=525, w=264, h=288, radius=8 */}
-            <div
+            {!hideQr && <div
               style={{
                 position: 'absolute',
                 left: 512,
@@ -235,7 +249,7 @@ export const SquareBanner = forwardRef<HTMLDivElement, SquareBannerProps>(
                 fgColor="#000000"
                 level="M"
               />
-            </div>
+            </div>}
           </>
         ) : (
           <>
@@ -256,23 +270,21 @@ export const SquareBanner = forwardRef<HTMLDivElement, SquareBannerProps>(
             </p>
 
             {/* Figma Presentation: Time — x=600, y=376, PT Serif Bold 60px */}
-            {presentation?.time && (
-              <p
-                style={{
-                  position: 'absolute',
-                  left: 600,
-                  top: 376,
-                  ...TYPOGRAPHY.title,
-                  fontWeight: 700,
-                  fontSize: 60,
-                  lineHeight: '72px',
-                  color: colors.text,
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                {presentation.time}
-              </p>
-            )}
+            <p
+              style={{
+                position: 'absolute',
+                left: 600,
+                top: 376,
+                ...TYPOGRAPHY.title,
+                fontWeight: 700,
+                fontSize: 60,
+                lineHeight: '72px',
+                color: colors.text,
+                whiteSpace: 'nowrap',
+              }}
+            >
+              {presentation?.time || '14:30–15:00'}
+            </p>
 
             {/* Figma Presentation: Date, Location & Stand — x=600, y=480, w=416 */}
             <div
@@ -295,7 +307,7 @@ export const SquareBanner = forwardRef<HTMLDivElement, SquareBannerProps>(
                     color: colors.text,
                   }}
                 >
-                  {presentation?.date || '5 мая'}
+                  {presentation?.date || '9 апреля'}
                 </p>
               </div>
 
@@ -327,7 +339,7 @@ export const SquareBanner = forwardRef<HTMLDivElement, SquareBannerProps>(
                     color: colors.text,
                   }}
                 >
-                  {presentation?.stand || 'Стенд Е-19'}
+                  {presentation?.stand || 'Стенд Е-32'}
                 </p>
               </div>
             </div>
